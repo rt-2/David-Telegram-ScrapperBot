@@ -6,62 +6,12 @@
 # Please give me credits if you use any codes from here.
 
 
-#
-#   Init(s)
-#
-# ...
-import os, sys
-# ...
-os.system('cls')
-
-#
-#   Installs(s)
-#
-print("Initialyzing ...")
-# ...
-print("Installing requierments ...")
-os.system('python3 -m pip install telethon')
-os.system('pip3 install telethon')
-os.system('pip3 install colorama')
-os.system('pip3 install python-socks')
-os.system('pip3 install async-timeout')
-
-#
-#   Import(s)
-#
-#import python-socks
-import socket
-import configparser
-import colorama
-import csv
-import time
-from telethon import TelegramClient
-#from telethon.tl.functions.messages import GetDialogsRequest
-#from telethon.tl.types import InputPeerEmpty
-
-
-#
-#   Var(s)
-#
-# ...
-last_date = None
-chunk_size = 200
-groups=[]
-# Color(s)
-#Fix for windows
-re=""
-gr=""
-cy=""
-#Old Linux Colors
-# re="\033[1;31m"
-# gr="\033[1;32m"
-# cy="\033[1;36m"
 
 #
 #   Functions
 #
 # Show Banner
-def banner():
+def clsAndShowBanner():
     # Clear terminal
 	os.system('cls')
     # App name
@@ -91,18 +41,74 @@ def exitProgram():
 # Send Error
 def exitProgramWithError(message):
     os.system('clear')
-    banner()
+    clsAndShowBanner()
     print("\n\nERROR:")
     print(message)
     exitProgram()
+
+
+#
+#   Init(s)
+#
+# ...
+import os, sys
+# ...
+clsAndShowBanner()
+
+#
+#   Installs(s)
+#
+print("Initialyzing ...")
+# ...
+print("Installing requierments ...")
+os.system('python3 -m pip install telethon')
+os.system('pip3 install telethon')
+#os.system('pip3 install colorama')
+os.system('pip3 install python-socks')
+os.system('pip3 install async-timeout')
+os.system('pip3 install asyncio')
+
+#
+#   Import(s)
+#
+#import python-socks
+import socket
+import configparser
+#import colorama
+import csv
+import time
+import asyncio
+from telethon import TelegramClient
+from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.types import InputPeerEmpty
+
+
+#
+#   Var(s)
+#
+# ...
+last_date = None
+chunk_size = 200
+groups=[]
+chats = []
+# Color(s)
+#Fix for windows
+re=""
+gr=""
+cy=""
+#Old Linux Colors
+# re="\033[1;31m"
+# gr="\033[1;32m"
+# cy="\033[1;36m"
+
 
 #
 #   Main
 #
 # Init(s)
-colorama.init()
+#colorama.init()
 # ...
-banner()
+clsAndShowBanner()
 # ...
 print("Initialyzed.")
 # ...
@@ -155,48 +161,92 @@ try:
 except Exception :
     exitProgramWithError("File 'config.data' not formatted correctly.")
 
-# Connecting
-try:
-    # ...
-    client = TelegramClient(phone, api_id, api_hash)
-    client.connect()
-except Exception :
-    exitProgramWithError("Cannot connect to Telegram API.")
 
-# Verifying auth
-if not client.is_user_authorized():
-    exitProgramWithError("Account not authorized.")
+# Main/All?
+async def main():
 
+    with TelegramClient(name, api_id, api_hash) as client:
+        print("INSIDE")
 
-# ...
-# with TelegramClient('anon', api_id, api_hash) as client:
-    # result = client(functions.messages.AddChatUserRequest(
-        # chat_id=chatid,
-        # user_id='username',
-        # fwd_limit=42
-    # ))
-    # print(result.stringify())
-
-# ...
-print("Hello world! (2)")
-
-# ...
-# result = client(GetDialogsRequest(
-             # offset_date=last_date,
-             # offset_id=0,
-             # offset_peer=InputPeerEmpty(),
-             # limit=chunk_size,
-             # hash = 0
-         # ))
-# chats.extend(result.chats)
-
-# for chat in chats:
+    # # Connecting
     # try:
-        # if chat.megagroup== True:
-            # groups.append(chat)
-    # except:
-        # continue
-        
-        
-# ...
-print("Hello world! (end)")
+        # # ...
+        # client = TelegramClient(phone, api_id, api_hash)
+        # client.connect()
+    # except Exception :
+        # exitProgramWithError("Cannot connect to Telegram API.")
+
+    # # Verifying auth
+    # if not client.is_user_authorized():
+        # exitProgramWithError("Account not authorized.")
+
+
+    # async with TelegramClient(name, api_id, api_hash) as client:
+        # result = client(GetDialogsRequest(
+            # offset_date=last_date,
+            # offset_id=0,
+            # offset_peer=InputPeerEmpty(),
+            # limit=chunk_size,
+            # hash = 0
+        # ))
+    # chats.extend(result.chats)
+
+    # for chat in chats:
+        # try:
+            # if chat.megagroup== True:
+                # groups.append(chat)
+        # except:
+            # continue
+
+
+
+    # ...
+    # with TelegramClient('anon', api_id, api_hash) as client:
+        # result = client(functions.messages.AddChatUserRequest(
+            # chat_id=chatid,
+            # user_id='username',
+            # fwd_limit=42
+        # ))
+        # print(result.stringify())
+
+    # ...
+    print("Hello world! (2)")
+
+    # ...
+    # result = client(GetDialogsRequest(
+                 # offset_date=last_date,
+                 # offset_id=0,
+                 # offset_peer=InputPeerEmpty(),
+                 # limit=chunk_size,
+                 # hash = 0
+             # ))
+    # chats.extend(result.chats)
+
+    # for chat in chats:
+        # try:
+            # if chat.megagroup== True:
+                # groups.append(chat)
+        # except:
+            # continue
+            
+            
+    # ...
+    print("Hello world! (end)")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+#
+#   executing 'main'
+#
+
+asyncio.run_coroutine_threadsafe(main(), asyncio.new_event_loop())
+
+
+#task = loop.create_task(main())
+#loop.run_until_complete(task)
