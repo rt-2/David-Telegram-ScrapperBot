@@ -187,19 +187,29 @@ async def main():
         ))
     chats.extend(result.chats)
     
-    print("\nList of chat (" + enumerate(chats) + "):")
+    print("\nList of chat (" + str(len(chats)) + "):")
     for chat in chats:
         try:
+            megaOrNot = chat.megagroup
+            print(" chat ({megaOrNot}): " + str(chat.title))
+            
             if chat.megagroup== True:
                 groups.append(chat)
-                print(' chat: ' + chat)
+                print(' chat: ' + str(chat.title))
                 
         except:
             continue
     print("")
+    
+    
+    for group in groups:
+        print("Trying" + group.title)
+        
+        
+        all_participants = []
+        all_participants = await client.get_participants(group, aggressive=True)
             
-            
-    print(''.join(groups))
+    #print(''.join(groups))
     
     
     # for chat in chats:
