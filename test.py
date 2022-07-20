@@ -108,6 +108,8 @@ print("ID:" + api_id)
 print("api_hash:" + api_hash)
 print("phone:" + phone)
 
+# ...
+client = TelegramClient(phone, api_id, api_hash)
 
 # ...
 print("Hello world! (2)")
