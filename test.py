@@ -19,24 +19,34 @@ print("Initialyzing ...")
 print("Installing requierments ...")
 os.system('python3 -m pip install telethon')
 os.system('pip3 install telethon')
+os.system('pip3 install colorama')
+os.system('pip3 install python-socks')
 
 #
 #   Import(s)
 #
+#import python-socks
+import socket
 import configparser
+import colorama
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
 
 
 #
-#   Color(s)
+#   Var(s)
 #
-# Fix for windows
+# ...
+last_date = None
+chunk_size = 200
+groups=[]
+# Color(s)
+#Fix for windows
 re=""
 gr=""
 cy=""
-# Old Linux Colors
+#Old Linux Colors
 # re="\033[1;31m"
 # gr="\033[1;32m"
 # cy="\033[1;36m"
@@ -67,9 +77,24 @@ def banner():
                
 	""")
     
+# Exit Program
+def exitProgram():
+    print("\nExiting program ...\n\n")
+    sys.exit(1)
+
+# Send Error
+def exitProgramWithError(message):
+    os.system('clear')
+    banner()
+    print("\n\nERROR:")
+    print(message)
+    exitProgram()
+
 #
 #   Main
 #
+# Init(s)
+colorama.init()
 # ...
 banner()
 # ...
@@ -101,41 +126,52 @@ print("Initialyzed.")
 #print("Hello world! (1)")
 
 
-# ...
+# Parsing config file
+print(" Parsing config file ...")
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
 
-# ...
-api_id = cpass['cred']['id']
-api_hash = cpass['cred']['hash']
-phone = cpass['cred']['phone']
 
-print("ID:" + api_id)
-print("api_hash:" + api_hash)
-print("phone:" + phone)
+
+try:
+    # ...
+    api_id = cpass['cred']['id']
+    api_hash = cpass['cred']['hash']
+    phone = cpass['cred']['phone']
+
+    print("ID:" + api_id)
+    print("api_hash:" + api_hash)
+    print("phone:" + phone)
+
+    #client = TelegramClient(phone, api_id, api_hash)
+    client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
+except Exception :
+    exitProgramWithError("File 'config.data' not formatted correctly.")
+
 
 # ...
 client = TelegramClient(phone, api_id, api_hash)
+client.connect()
 
 # ...
 print("Hello world! (2)")
 
 # ...
-result = client(GetDialogsRequest(
-             offset_date=last_date,
-             offset_id=0,
-             offset_peer=InputPeerEmpty(),
-             limit=chunk_size,
-             hash = 0
-         ))
-chats.extend(result.chats)
+# result = client(GetDialogsRequest(
+             # offset_date=last_date,
+             # offset_id=0,
+             # offset_peer=InputPeerEmpty(),
+             # limit=chunk_size,
+             # hash = 0
+         # ))
+# chats.extend(result.chats)
 
-for chat in chats:
-    try:
-        if chat.megagroup== True:
-            groups.append(chat)
-    except:
-        continue
+# for chat in chats:
+    # try:
+        # if chat.megagroup== True:
+            # groups.append(chat)
+    # except:
+        # continue
         
         
 # ...
