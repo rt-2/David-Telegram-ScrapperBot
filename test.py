@@ -6,9 +6,30 @@
 # Please give me credits if you use any codes from here.
 
 
+#
+#   Var(s)
+#
+# Constant(s)
+TELEGRAM_TEST_IP = '149.154.167.40'
+TELEGRAM_TEST_PORT = 80
+STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
+STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
+STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
+ONLY_MEGA_GROUPS = False
+# Var(s)
+api_id = None
+api_hash = None
+bot_token = None
+phone = None
+name = None
+last_date = None
+chunk_size = 200
+groups=[]
+chats = []
+
 
 #
-#   Functions
+#   Function(s)
 #
 # Show Banner
 def clsAndShowBanner():
@@ -40,7 +61,7 @@ def exitProgram():
 
 # Send Error
 def exitProgramWithError(message):
-    #clsAndShowBanner()
+    clsAndShowBanner()
     print("\n\nERROR:")
     print(message)
     exitProgram()
@@ -72,39 +93,13 @@ print("Installing requierments ...")
 #import python-socks
 import socket
 import configparser
-import csv
-import time
+#import csv
+#import time
 import asyncio
 from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
 
-
-#
-#   Var(s)
-#
-# ...
-TELEGRAM_TEST_IP = '149.154.167.40'
-TELEGRAM_TEST_PORT = 80
-ONLY_MEGA_GROUPS = False
-api_id = None
-api_hash = None
-bot_token = None
-phone = None
-name = None
-last_date = None
-chunk_size = 200
-groups=[]
-chats = []
-# Color(s)
-#Fix for windows
-re=""
-gr=""
-cy=""
-#Old Linux Colors
-# re="\033[1;31m"
-# gr="\033[1;32m"
-# cy="\033[1;36m"
 
 
 #
@@ -143,20 +138,22 @@ try:
     print("\n")
     
 except Exception :
-    exitProgramWithError("File 'config.data' not formatted correctly.")
+    # ...
+    exitProgramWithError(STR_CONFIG_FILE_ERROR)
 
 # Connecting
 try:
-    # ...        
+    # ...
     client = TelegramClient(name, api_id, api_hash)
 except Exception :
-    exitProgramWithError("Cannot connect to Telegram API.")
+    # ...
+    exitProgramWithError(STR_CONNECTION_FAILED)
 
 
 async def main():
 
     # ...
-    print("TESTING: 'main' starting ...\n")
+    #print("TESTING: 'main' starting ...\n")
 
 
 
@@ -199,15 +196,27 @@ async def main():
     print("")
     
     
+    print("")
+    print("")
+    print("")
+    print("Scraping members from group  :")
+    print("")
     for group in groups:
-        print("Trying " + group.title)
+    
+        group_members = []
+        print(group.title + " ;")
         
         try:
         
-            all_participants = []
-            all_participants = await client.get_participants(group, aggressive=True)
+            group_members = await client.get_participants(group, aggressive=True)
         except:
-            exitProgramWithError("    This group requires admin access")
+            print("    " + STR_GROUP_REQUIRES_ADMIN)
+            
+        print("      " + "Gathered %d members" % len(group_members))
+        print("")
+        
+    print("")
+    print("")
             
     #print(''.join(groups))
     
@@ -250,7 +259,7 @@ async def main():
     #print("Hello world! (end)")
     
     # ...
-    print("\nTESTING: 'main' ending ...\n")
+    #print("\nTESTING: 'main' ending ...\n")
     
     
     
@@ -270,3 +279,8 @@ with client:
 
 #task = loop.create_task(main())
 #loop.run_until_complete(task)
+
+
+
+# ...
+print("\n\n\nExecution over, good bye!\n\n")
