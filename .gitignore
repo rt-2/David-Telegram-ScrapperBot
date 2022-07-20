@@ -6,3 +6,4 @@ test-build/test-build.7z
 test-build/test.py
 *.sqlite
 .vs/ProjectSettings.json
+.vs/github-content/v16/.suo
