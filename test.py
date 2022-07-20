@@ -61,12 +61,11 @@ clsAndShowBanner()
 print("Initialyzing ...")
 # ...
 print("Installing requierments ...")
-#os.system('python3 -m pip install telethon')
-os.system('pip3 install telethon')
-#os.system('pip3 install colorama')
-os.system('pip3 install python-socks')
-os.system('pip3 install async-timeout')
-os.system('pip3 install asyncio')
+# #os.system('python3 -m pip install telethon')
+# os.system('pip3 install telethon')
+# os.system('pip3 install python-socks')
+# os.system('pip3 install async-timeout')
+# os.system('pip3 install asyncio')
 
 #
 #   Import(s)
@@ -78,7 +77,7 @@ import configparser
 import csv
 import time
 import asyncio
-from telethon import TelegramClient
+from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
 
@@ -163,27 +162,32 @@ except Exception :
 
 
 # Main/All?
-async def main():
+def main():
 
     # ...
     print("\nTESTING: 'main' starting ...\n")
 
+    # ...
+    print("TESTING: 'main' started.")
 
+    # Connecting
+    try:
+        # ...
+        with TelegramClient(phone, api_id, api_hash) as client:
+            print("INSIDE")
+            
+        #client = TelegramClient(phone, api_id, api_hash)
+        #client.connect()
+    except Exception :
+        exitProgramWithError("Cannot connect to Telegram API.")
 
-    with TelegramClient(name, api_id, api_hash) as client:
-        print("INSIDE")
-
-    # # Connecting
-    # try:
-        # # ...
-        # client = TelegramClient(phone, api_id, api_hash)
-        # client.connect()
-    # except Exception :
-        # exitProgramWithError("Cannot connect to Telegram API.")
-
-    # # Verifying auth
-    # if not client.is_user_authorized():
-        # exitProgramWithError("Account not authorized.")
+    # Verifying auth
+    if not client.is_user_authorized():
+        #exitProgramWithError("Account not authorized.")
+        client.send_code_request(phone)
+        os.system('clear')
+        banner()
+        client.sign_in(phone, input(gr+'[+] Enter the verification code: '+yo))
 
 
     # async with TelegramClient(name, api_id, api_hash) as client:
@@ -203,6 +207,18 @@ async def main():
         # except:
             # continue
 
+
+    # with TelegramClient(name, api_id, api_hash) as client:
+        # await print("INSIDE")
+        
+    result = client(GetDialogsRequest(
+                 offset_date=last_date,
+                 offset_id=0,
+                 offset_peer=InputPeerEmpty(),
+                 limit=chunk_size,
+                 hash = 0
+             ))
+    #chats.extend(result.chats)
 
 
     # ...
@@ -252,7 +268,7 @@ async def main():
 #   executing 'main'
 #
 
-#asyncio.run_coroutine_threadsafe(main(), asyncio.new_event_loop())
+main()
 
 
 #task = loop.create_task(main())
