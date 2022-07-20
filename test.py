@@ -159,11 +159,13 @@ async def main():
         # ...
         api_id = cpass['cred']['id']
         api_hash = cpass['cred']['hash']
+        bot_token = cpass['cred']['bot_token']
         phone = cpass['cred']['phone']
         name = "testName"
 
         print("ID:" + api_id)
         print("api_hash:" + api_hash)
+        print("bot_token:" + bot_token)
         print("phone:" + phone)
         print("name:" + name)
 
@@ -171,6 +173,29 @@ async def main():
         #client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
     except Exception :
         exitProgramWithError("File 'config.data' not formatted correctly.")
+
+
+    # Connecting
+    try:
+        # ...
+
+        # print("test1")
+        # #client = TelegramClient(name, api_id, api_hash)
+        # print("test2")
+        # #await client.start()
+        # print("test3")
+        # bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
+        # print("test4")
+        client = TelegramClient(None, api_id, api_hash)
+        client.session.set_dc(2, '149.154.167.40', 80)
+        client.start(
+            phone='9996621234', code_callback=lambda: '22222'
+        )
+            
+        #client = TelegramClient(phone, api_id, api_hash)
+        #client.connect()
+    except Exception :
+        exitProgramWithError("Cannot connect to Telegram API.")
 
     # Verifying auth
     if not client.is_user_authorized():
@@ -180,22 +205,6 @@ async def main():
         banner()
         client.sign_in(phone, input(gr+'[+] Enter the verification code: '+yo))
         sys.exit(1)
-
-    # Connecting
-    try:
-        # ...
-
-        print("test1")
-        client = TelegramClient(name, api_id, api_hash)
-        print("test2")
-        await client.start()
-        print("test3")
-            
-        #client = TelegramClient(phone, api_id, api_hash)
-        #client.connect()
-    except Exception :
-        exitProgramWithError("Cannot connect to Telegram API.")
-
 
 
     # async with TelegramClient(name, api_id, api_hash) as client:
