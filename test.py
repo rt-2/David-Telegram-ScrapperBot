@@ -75,4 +75,23 @@ with open('config.data', 'w') as setup:
 
 
 # ...
-print("Hello world!")
+print("Hello world! (1)")
+
+
+# ...
+cpass = configparser.RawConfigParser()
+cpass.read('config.data')
+
+# ...
+api_id = cpass['cred']['id']
+api_hash = cpass['cred']['hash']
+phone = cpass['cred']['phone']
+client = TelegramClient(phone, api_id, api_hash)
+
+print("ID:" + api_id)
+print("api_hash:" + api_hash)
+print("phone:" + phone)
+
+
+# ...
+print("Hello world! (2)")
