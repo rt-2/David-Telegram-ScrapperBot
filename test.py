@@ -9,7 +9,10 @@
 #
 #   Init(s)
 #
+# ...
 import os, sys
+# ...
+os.system('cls')
 
 #
 #   Installs(s)
@@ -70,12 +73,12 @@ def banner():
     /_____/\__,_/ |___/_/\__,_/  /____/    /_/  \___/_/\___/_____/\____/\__/  
                                                                             """)
     # Credits
-	print(f"""         _                     _       ____  
-        | |__  _   _      _ __| |_    |___ \ 
-        | '_ \| | | |    | '__| __|____ __) |
-        | |_) | |_| |    | |  | ||_____/ __/ 
-        |_.__/ \__, |    |_|   \__|   |_____|
-               |___/                      
+	print(f"""             _                     _       ____  
+            | |__  _   _      _ __| |_    |___ \ 
+            | '_ \| | | |    | '__| __|____ __) |
+            | |_) | |_| |    | |  | ||_____/ __/ 
+            |_.__/ \__, |    |_|   \__|   |_____|
+                   |___/                      
                
                
 	""")
@@ -159,6 +162,11 @@ try:
     client.connect()
 except Exception :
     exitProgramWithError("Cannot connect to Telegram API.")
+
+# Verifying auth
+if not client.is_user_authorized():
+    exitProgramWithError("Account not authorized.")
+
 
 # ...
 # with TelegramClient('anon', api_id, api_hash) as client:
