@@ -187,12 +187,16 @@ async def main():
         ))
     chats.extend(result.chats)
     
+    print("\nList of chat (" + enumerate(chats) + "):")
     for chat in chats:
         try:
             if chat.megagroup== True:
                 groups.append(chat)
+                print(' chat: ' + chat)
+                
         except:
             continue
+    print("")
             
             
     print(''.join(groups))
