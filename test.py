@@ -118,9 +118,9 @@ async def getChatList():
             # Print(s)
             printl(1, "%s  ;" % title )
             printl(2, "(%d members, %s)" % (memberNb, megaOrNotStr) )
-            #print(str(chat) + " ;")
+            #print(str(TESTS_ONLY_MEGAGROUPS) + " ;")
             # Test(s)
-            if chat.megagroup == True or TESTS_ONLY_MEGAGROUPS == False :
+            if (megaOrNot == True or TESTS_ONLY_MEGAGROUPS == False) :
                 # Is a mega group, or it's ignored for tests
                 groups.append(chat)
                 printl(4, colorama.Fore.GREEN + "ADDED")
@@ -141,13 +141,25 @@ async def getGroupList():
         group_members = []
         
         printl(1, group.title + " ;")
+        #printl(1, str(group))
         
-        try:
+        # Test(s)
+        # ...
+        if(group.admin_rights == None) :
+            printl(5, colorama.Fore.RED + STR_GROUP_REQUIRES_ADMIN + colorama.Fore.RESET)
         
-            group_members = await client.get_participants(group, aggressive=True)
-        except:
-            printl(2, colorama.Fore.RED + STR_GROUP_REQUIRES_ADMIN + colorama.Fore.RESET)
+        else :
+            #printl(1, str(group.admin_rights.other) + " ;")
             
+            try:
+                var = True
+                
+                #group_members = await client.get_participants(group, aggressive=True)
+            except Exception as e :
+                var = True
+                printl(6, e)
+                #printl(5, colorama.Fore.RED + STR_GROUP_REQUIRES_ADMIN + colorama.Fore.RESET)
+                
         printl(3, "Gathered %d members" % len(group_members))
         print("")
     
@@ -178,7 +190,7 @@ import os, sys
 # Var(s)
 UI_SWITCH_PAGES = (UI_SWITCH_PAGES, False)[TESTS_TESTING]
 TESTS_SHOW_BOT_SETTINGS = TESTS_SHOW_BOT_SETTINGS and TESTS_TESTING
-TESTS_ONLY_MEGAGROUPS = TESTS_ONLY_MEGAGROUPS and not TESTS_TESTING
+#TESTS_ONLY_MEGAGROUPS = TESTS_ONLY_MEGAGROUPS and not TESTS_TESTING
 TESTS_CHECK_UPDATES = (TESTS_CHECK_UPDATES , False)[TESTS_TESTING]
 # Init(s)
 
@@ -200,7 +212,7 @@ import configparser
 import colorama
 from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
-from telethon.tl.types import InputPeerEmpty
+from telethon.tl.types import InputPeerEmpty, ChannelParticipantAdmin
 
 
 # Main/All?
