@@ -80,7 +80,7 @@ clsAndShowBanner()
 #
 print("Initialyzing ...")
 # ...
-print("Installing requierments ...")
+print("Installing requirements ...")
 # #os.system('python3 -m pip install telethon')
 # os.system('pip3 install telethon')
 # os.system('pip3 install asyncio')
