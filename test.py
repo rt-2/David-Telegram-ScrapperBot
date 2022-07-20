@@ -15,7 +15,8 @@ TELEGRAM_TEST_PORT = 80
 STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
 STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
 STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
-ONLY_MEGA_GROUPS = False
+TESTS_ONLY_MEGAGROUPS = True
+TESTS_CHECK_UPDATES = True
 # Var(s)
 api_id = None
 api_hash = None
@@ -81,14 +82,15 @@ clsAndShowBanner()
 print("Initialyzing ...")
 # ...
 print("Installing requirements ...")
-# #os.system('python3 -m pip install telethon')
-# os.system('pip3 install telethon')
-# os.system('pip3 install asyncio')
+if TESTS_CHECK_UPDATES :
+    os.system('python3 -m pip install telethon')
+    os.system('pip3 install configparser')
+    os.system('pip3 install telethon')
+    os.system('pip3 install asyncio')
 
 #
 #   Import(s)
 #
-import socket
 import configparser
 import asyncio
 from telethon import TelegramClient, events
@@ -183,7 +185,7 @@ async def main():
         try:
             megaOrNot = chat.megagroup
             print(f" chat ({megaOrNot}): " + str(chat.title))
-            if chat.megagroup == True or ONLY_MEGA_GROUPS == False:
+            if chat.megagroup == True or TESTS_ONLY_MEGAGROUPS == False:
                 groups.append(chat)
                 
         except:
@@ -194,7 +196,7 @@ async def main():
     print("")
     print("")
     print("")
-    print("Scraping members from group  :")
+    print("Scraping members from groups(%d)  :" % len(groups))
     print("")
     for group in groups:
     
