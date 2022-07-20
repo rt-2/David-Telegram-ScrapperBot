@@ -72,7 +72,6 @@ print("Installing requierments ...")
 #import python-socks
 import socket
 import configparser
-#import colorama
 import csv
 import time
 import asyncio
@@ -117,30 +116,6 @@ clsAndShowBanner()
 # ...
 print("Initialyzed.")
 # ...
-#os.system("notepad config.data") # no need for that in windows
-
-# # ...
-# cpass = configparser.RawConfigParser()
-# cpass.add_section('cred')
-# xid = input(gr+"[+] Enter API ID : "+re)
-# cpass.set('cred', 'id', xid)
-# xhash = input(gr+"[+] Enter Hash : "+re)
-# cpass.set('cred', 'hash', xhash)
-# xphone = input(gr+"[+] Enter Phone Number: "+re)
-# cpass.set('cred', 'phone', xphone)
-# # ...
-# with open('config.data', 'w') as setup:
-	# cpass.write(setup)
-    
-# print(gr+"[+] Setup complete!")
-# print(gr+"[+] Now you can run any tool!")
-# print(gr+"[+] Make sure to read README.md before using this tool.")
-# print(gr+"[+] https://github.com/AbirHasan2005/TelegramScraper/blob/master/README.md")
-# print("\033[92m[+] Telegram Group: \033[96mhttp://t.me/linux_repo\033[0m")
-
-
-# ...
-#print("Hello world! (1)")
 
 # Main/All?
 
@@ -158,36 +133,21 @@ try:
     phone = cpass['cred']['phone']
     name = "testName"
 
+    print("\nConfigurations:")
     print("ID:" + api_id)
     print("api_hash:" + api_hash)
     print("bot_token:" + bot_token)
     print("phone:" + phone)
     print("name:" + name)
-
-    #client = TelegramClient('anon', api_id, api_hash)
-    #client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
+    print("\n")
+    
 except Exception :
     exitProgramWithError("File 'config.data' not formatted correctly.")
 
 # Connecting
 try:
-    # ...
-
-    # print("test1")
-    # #client = TelegramClient(name, api_id, api_hash)
-    # print("test2")
-    # #await client.start()
-    # print("test3")
-    #client = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
-    # print("test4")
-    # client = TelegramClient(None, api_id, api_hash)
-    # client.session.set_dc(2, TELEGRAM_TEST_IP, TELEGRAM_TEST_PORT)
-    # client.start(
-        # phone='9996621234', code_callback=lambda: '22222'
-    # )
-        
+    # ...        
     client = TelegramClient(name, api_id, api_hash)
-    #client.connect()
 except Exception :
     exitProgramWithError("Cannot connect to Telegram API.")
 
@@ -214,19 +174,30 @@ async def main():
 
 
     me = await client.get_me()
-
+    #print(me.stringify())
 
 
     # async with TelegramClient(name, api_id, api_hash) as client:
-        # result = client(GetDialogsRequest(
-            # offset_date=last_date,
-            # offset_id=0,
-            # offset_peer=InputPeerEmpty(),
-            # limit=chunk_size,
-            # hash = 0
-        # ))
-    # chats.extend(result.chats)
-
+    result = await client(GetDialogsRequest(
+            offset_date=last_date,
+            offset_id=0,
+            offset_peer=InputPeerEmpty(),
+            limit=chunk_size,
+            hash = 0
+        ))
+    chats.extend(result.chats)
+    
+    for chat in chats:
+        try:
+            if chat.megagroup== True:
+                groups.append(chat)
+        except:
+            continue
+            
+            
+    print(''.join(groups))
+    
+    
     # for chat in chats:
         # try:
             # if chat.megagroup== True:
@@ -258,28 +229,11 @@ async def main():
         # print(result.stringify())
 
     # ...
-    print("Hello world! (2)")
-
-    # ...
-    # result = client(GetDialogsRequest(
-                 # offset_date=last_date,
-                 # offset_id=0,
-                 # offset_peer=InputPeerEmpty(),
-                 # limit=chunk_size,
-                 # hash = 0
-             # ))
-    # chats.extend(result.chats)
-
-    # for chat in chats:
-        # try:
-            # if chat.megagroup== True:
-                # groups.append(chat)
-        # except:
-            # continue
+    #print("Hello world! (2)")
             
             
     # ...
-    print("Hello world! (end)")
+    #print("Hello world! (end)")
     
     # ...
     print("\nTESTING: 'main' ending ...\n")
