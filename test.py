@@ -21,6 +21,7 @@ os.system('python3 -m pip install telethon')
 os.system('pip3 install telethon')
 os.system('pip3 install colorama')
 os.system('pip3 install python-socks')
+os.system('pip3 install async-timeout')
 
 #
 #   Import(s)
@@ -29,9 +30,11 @@ os.system('pip3 install python-socks')
 import socket
 import configparser
 import colorama
-from telethon.sync import TelegramClient
-from telethon.tl.functions.messages import GetDialogsRequest
-from telethon.tl.types import InputPeerEmpty
+import csv
+import time
+from telethon import TelegramClient
+#from telethon.tl.functions.messages import GetDialogsRequest
+#from telethon.tl.types import InputPeerEmpty
 
 
 #
@@ -138,13 +141,15 @@ try:
     api_id = cpass['cred']['id']
     api_hash = cpass['cred']['hash']
     phone = cpass['cred']['phone']
+    name = "testName"
 
     print("ID:" + api_id)
     print("api_hash:" + api_hash)
     print("phone:" + phone)
+    print("name:" + name)
 
-    #client = TelegramClient(phone, api_id, api_hash)
-    client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
+    #client = TelegramClient('anon', api_id, api_hash)
+    #client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
 except Exception :
     exitProgramWithError("File 'config.data' not formatted correctly.")
 
@@ -152,6 +157,13 @@ except Exception :
 # ...
 client = TelegramClient(phone, api_id, api_hash)
 client.connect()
+# with TelegramClient(name, api_id, api_hash) as client:
+   # result = client(functions.messages.AddChatUserRequest(
+        # chat_id=chatid,
+        # user_id='username',
+        # fwd_limit=42
+    # ))
+# print(result.stringify())
 
 # ...
 print("Hello world! (2)")
