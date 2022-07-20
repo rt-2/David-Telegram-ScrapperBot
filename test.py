@@ -10,15 +10,14 @@
 #   Var(s)
 #
 # Constant(s)
+TESTS_TESTING = True
 TELEGRAM_TEST_IP = '149.154.167.40'
 TELEGRAM_TEST_PORT = 80
 STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
 STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
 STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
-#TESTS_ONLY_MEGAGROUPS = True
-#TESTS_CHECK_UPDATES = True
-TESTS_ONLY_MEGAGROUPS = False
-TESTS_CHECK_UPDATES = False
+TESTS_ONLY_MEGAGROUPS = not TESTS_TESTING
+TESTS_CHECK_UPDATES = not TESTS_TESTING
 # Var(s)
 api_id = None
 api_hash = None
@@ -100,19 +99,107 @@ from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
 
 
+# Main/All?
+async def main():
+
+    # ...
+    #print("TESTING: 'main' starting ...\n")
+
+
+
+
+
+    # Verifying auth
+    # if not client.is_user_authorized():
+        # #exitProgramWithError("Account not authorized.")
+        # client.send_code_request(phone)
+        # os.system('clear')
+        # banner()
+        # client.sign_in(phone, input(gr+'[+] Enter the verification code: '+yo))
+        # sys.exit(1)
+
+
+    #me = await client.get_me()
+    #print(me.stringify())
+
+
+    # async with TelegramClient(name, api_id, api_hash) as client:
+    result = await client(GetDialogsRequest(
+            offset_date=last_date,
+            offset_id=0,
+            offset_peer=InputPeerEmpty(),
+            limit=chunk_size,
+            hash = 0
+        ))
+    chats.extend(result.chats)
+    
+    # ...
+    print("\nList of chats (%d):" % (len(chats)) )
+    for chat in chats:
+        try:
+            # Var(s)
+            megaOrNot = chat.megagroup
+            title = chat.title
+            memberNb = chat.participants_count
+            megaOrNotStr = ("Not Mega", "Mega")[megaOrNot]
+            # Print(s)
+            print("  %s  ;" % title )
+            print("    (%d members, %s)" % (memberNb, megaOrNotStr) )
+            #print(str(chat) + " ;")
+            # Test(s)
+            if chat.megagroup == True or TESTS_ONLY_MEGAGROUPS == False :
+                # Is a mega group, or it's ignored for tests
+                groups.append(chat)
+                print("          ADDED")
+            else :
+                # Is NOT a megagroup and therefore ignored
+                print("          EXLUDED")
+                
+                
+        except:
+            continue
+    print("")
+    
+    
+    # ...
+    print("")
+    print("")
+    print("")
+    print("Scraping members from choosen groups(%d)  :" % len(groups))
+    print("")
+    # ...
+    for group in groups:
+    
+        group_members = []
+        print(group.title + " ;")
+        
+        try:
+        
+            group_members = await client.get_participants(group, aggressive=True)
+        except:
+            print("    " + STR_GROUP_REQUIRES_ADMIN)
+            
+        print("      " + "Gathered %d members" % len(group_members))
+        print("")
+        
+    print("")
+    print("")
+    
+    # ...
+    #print("\nTESTING: 'main' ending ...\n")
+    
+    
+    
 
 #
 #   Main
 #
 # Init(s)
-#colorama.init()
 # ...
 clsAndShowBanner()
 # ...
 print("Initialyzed.")
-# ...
 
-# Main/All?
 
 # Parsing config file
 print(" Parsing config file ...")
@@ -149,108 +236,9 @@ except Exception :
     exitProgramWithError(STR_CONNECTION_FAILED)
 
 
-async def main():
-
-    # ...
-    #print("TESTING: 'main' starting ...\n")
-
-
-
-
-
-    # Verifying auth
-    # if not client.is_user_authorized():
-        # #exitProgramWithError("Account not authorized.")
-        # client.send_code_request(phone)
-        # os.system('clear')
-        # banner()
-        # client.sign_in(phone, input(gr+'[+] Enter the verification code: '+yo))
-        # sys.exit(1)
-
-
-    #me = await client.get_me()
-    #print(me.stringify())
-
-
-    # async with TelegramClient(name, api_id, api_hash) as client:
-    result = await client(GetDialogsRequest(
-            offset_date=last_date,
-            offset_id=0,
-            offset_peer=InputPeerEmpty(),
-            limit=chunk_size,
-            hash = 0
-        ))
-    chats.extend(result.chats)
-    
-    #
-    print("\nList of chat (%d):" % (len(chats)) )
-    for chat in chats:
-        try:
-            # Var(s)
-            megaOrNot = chat.megagroup
-            title = chat.title
-            memberNb = chat.participants_count
-            megaOrNotStr = ("Not Mega", "Mega")[megaOrNot]
-            # Print(s)
-            print("  %s  ;" % title )
-            print("    (%d members, %s)" % (memberNb, megaOrNotStr) )
-            #print(str(chat) + " ;")
-            # Test(s)
-            if chat.megagroup == True or TESTS_ONLY_MEGAGROUPS == False :
-                # Is a mega group, or it's ignored for tests
-                groups.append(chat)
-                print("          ADDED")
-            else :
-                # Is NOT a megagroup and therefore ignored
-                print("          EXLUDED")
-                
-                
-        except:
-            continue
-    print("")
-    
-    
-    print("")
-    print("")
-    print("")
-    print("Scraping members from groups(%d)  :" % len(groups))
-    print("")
-    for group in groups:
-    
-        group_members = []
-        print(group.title + " ;")
-        
-        try:
-        
-            group_members = await client.get_participants(group, aggressive=True)
-        except:
-            print("    " + STR_GROUP_REQUIRES_ADMIN)
-            
-        print("      " + "Gathered %d members" % len(group_members))
-        print("")
-        
-    print("")
-    print("")
-    
-    # ...
-    #print("\nTESTING: 'main' ending ...\n")
-    
-    
-    
-    
-#
-#   executing 'main'
-#
-
-#asyncio.get_event_loop().run_until_complete(main())
-#asyncio.run(main())
+# Execute main
 with client:
     client.loop.run_until_complete(main())
 
-#task = loop.create_task(main())
-#loop.run_until_complete(task)
-
-
-
-# ...
+# Print good bye
 print("\n\n\nExecution over, good bye!\n\n")
