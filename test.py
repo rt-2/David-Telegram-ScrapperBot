@@ -7,9 +7,22 @@
 
 
 #
-#   Import(s)
+#   Init(s)
 #
 import os, sys
+
+#
+#   Installs(s)
+#
+print("Initialyzing ...")
+# ...
+print("Installing requierments ...")
+os.system('python3 -m pip install telethon')
+os.system('pip3 install telethon')
+
+#
+#   Import(s)
+#
 import configparser
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetDialogsRequest
@@ -57,12 +70,6 @@ def banner():
 #
 #   Main
 #
-# ...
-print("Initialyzing...")
-# ...
-print(gr+"[+] Installing requierments ...")
-os.system('python3 -m pip install telethon')
-os.system('pip3 install telethon')
 # ...
 banner()
 # ...
