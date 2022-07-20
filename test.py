@@ -15,8 +15,10 @@ TELEGRAM_TEST_PORT = 80
 STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
 STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
 STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
-TESTS_ONLY_MEGAGROUPS = True
-TESTS_CHECK_UPDATES = True
+#TESTS_ONLY_MEGAGROUPS = True
+#TESTS_CHECK_UPDATES = True
+TESTS_ONLY_MEGAGROUPS = False
+TESTS_CHECK_UPDATES = False
 # Var(s)
 api_id = None
 api_hash = None
@@ -180,13 +182,28 @@ async def main():
         ))
     chats.extend(result.chats)
     
+    #
     print("\nList of chat (%d):" % (len(chats)) )
     for chat in chats:
         try:
+            # Var(s)
             megaOrNot = chat.megagroup
-            print(f" chat ({megaOrNot}): " + str(chat.title))
-            if chat.megagroup == True or TESTS_ONLY_MEGAGROUPS == False:
+            title = chat.title
+            memberNb = chat.participants_count
+            megaOrNotStr = ("Not Mega", "Mega")[megaOrNot]
+            # Print(s)
+            print("  %s  ;" % title )
+            print("    (%d members, %s)" % (memberNb, megaOrNotStr) )
+            #print(str(chat) + " ;")
+            # Test(s)
+            if chat.megagroup == True or TESTS_ONLY_MEGAGROUPS == False :
+                # Is a mega group, or it's ignored for tests
                 groups.append(chat)
+                print("          ADDED")
+            else :
+                # Is NOT a megagroup and therefore ignored
+                print("          EXLUDED")
+                
                 
         except:
             continue
