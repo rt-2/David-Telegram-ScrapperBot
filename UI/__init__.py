@@ -53,11 +53,25 @@ def resetBanner(forceCls = False):
         print("\n")
         print("\n")
         
-# Show bot settings
+# Show formatted 'print'
 def printl(indentLevel, str):
-    #
+    str = indentText(indentLevel, str)
+    return print(str)
+    
+# Show formatted 'input'
+def inputl(indentLevel, str, color = None):
+    if(color != None):
+        str = color + str + colorama.Fore.RESET
+    str = indentText(indentLevel, str)
+    return input(str)
+  
+# Return indented texts
+def indentText(indentLevel, str):
     spaces = " " * ((indentLevel * 4 ) + 2)
-    print(spaces + str)
+    return spaces + str
+
+
+
     
 
 

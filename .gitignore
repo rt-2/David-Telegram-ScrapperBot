@@ -7,3 +7,7 @@ test-build/test.py
 *.sqlite
 .vs/ProjectSettings.json
 .vs/github-content/v16/.suo
+testName.session-journal
+*.pyc
+*.pyc
+*.pyc

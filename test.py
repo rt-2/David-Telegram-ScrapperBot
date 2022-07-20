@@ -28,8 +28,8 @@ TELEGRAM_PROD_PORT = 443
 STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
 STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
 STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
+STR_GROUP_INVALIDNUMBER = "Please enter a valid number"
 TESTS_ONLY_MEGAGROUPS = True
-TESTS_CHECK_UPDATES = True
 TESTS_SHOW_BOT_SETTINGS = False
 os.environ["UI_SWITCH_PAGES"] = "True"
 # Var(s)
@@ -49,20 +49,9 @@ asked_config = {}
 # Var(s)
 TESTS_SHOW_BOT_SETTINGS = TESTS_SHOW_BOT_SETTINGS and TESTS_TESTING
 #TESTS_ONLY_MEGAGROUPS = TESTS_ONLY_MEGAGROUPS and not TESTS_TESTING
-TESTS_CHECK_UPDATES = (TESTS_CHECK_UPDATES , False)[TESTS_TESTING]
 os.environ["UI_SWITCH_PAGES"] = ("True", "False")[TESTS_TESTING]
 # Init(s)
 
-#
-#   Installs(s)
-#
-# ...
-print("Installing requirements ...")
-if TESTS_CHECK_UPDATES :
-    os.system('python -m pip install telethon')
-    os.system('pip install configparser')
-    os.system('pip install telethon')
-    os.system('pip install colorama')
 
 #
 #   Import(s)
@@ -90,18 +79,56 @@ async def main():
         await client.send_code_request(asked_config['phone'])
         await client.sign_in(asked_config['phone'], input('[+] Enter the verification code: '))
 
+    # ...
     UI.resetBanner()
     
+    # ...
     chats = await DTS.executeModule("Finding list of chats", DTS.getChatList, client)
 
+    # ...
     groups = await DTS.executeModule("Checking list of chats (%d)" % len(chats), DTS.checkChatList, chats)
 
-    
+    # ...
     UI.resetBanner()
     
+    # ...
+    UI.printl(0, 'Groupe Selection')
+    UI.printl(1, 'Choose a group to scrape members :')
+    for i, g in enumerate(groups):
+        UI.printl(2, '[ %d ] - %s ;' % (i, g.title))
+    print('')
+
+    # ...
+    while(True):
+        # ...
+        asked_groupid = UI.inputl(2, "Enter a Group ID: ", colorama.Fore.RED)
+
+        try:
+            groupid = int(asked_groupid)
+
+            print("len is %d" % len(groups))
+            if(groupid < len(groups) and groupid >= 0):
+                # ...
+                print("Group is %d" % groupid)
+                group1 = groups[groupid]
+                break
+        except:
+            pass
+
+        UI.printl(1, STR_GROUP_INVALIDNUMBER)
+
+
+
+
+
+
+    # ...
+    UI.resetBanner()
     
-    await DTS.executeModule("Scraping members from choosen groups(%d)" % len(groups), DTS.getGroupList, groups)
+    #members = await DTS.executeModule("Scraping members from choosen groups(%d)" % len(groups), DTS.getGroupList, groups)
     
+    
+
     
     # ...
     #print("\n\nTESTING: 'main' ending ...\n\n")

@@ -116,7 +116,7 @@ async def getGroupList(groups):
         group_members = []
         
         UI.printl(1, group.title + " ;")
-        #printl(1, str(group))
+        UI.printl(1, str(group))
         
         # Test(s)
         # ...
@@ -137,6 +137,9 @@ async def getGroupList(groups):
                 
         UI.printl(3, "Gathered %d members" % len(group_members))
         print("")
+
+    return group_members
+
     
     
 
