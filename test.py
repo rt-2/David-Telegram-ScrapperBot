@@ -7,9 +7,18 @@
 
 import os, sys
 import configparser
-re="\033[1;31m"
-gr="\033[1;32m"
-cy="\033[1;36m"
+
+#   Color(s)
+# Fix for windows
+re=""
+gr=""
+cy=""
+# Old Linux Colors
+# re="\033[1;31m"
+# gr="\033[1;32m"
+# cy="\033[1;36m"
+
+
 def banner():
 	os.system('cls')
 	print(f"""
