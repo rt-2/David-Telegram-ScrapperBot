@@ -83,18 +83,13 @@ print("Initialyzing ...")
 print("Installing requierments ...")
 # #os.system('python3 -m pip install telethon')
 # os.system('pip3 install telethon')
-# os.system('pip3 install python-socks')
-# os.system('pip3 install async-timeout')
 # os.system('pip3 install asyncio')
 
 #
 #   Import(s)
 #
-#import python-socks
 import socket
 import configparser
-#import csv
-#import time
 import asyncio
 from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
@@ -217,53 +212,9 @@ async def main():
         
     print("")
     print("")
-            
-    #print(''.join(groups))
-    
-    
-    # for chat in chats:
-        # try:
-            # if chat.megagroup== True:
-                # groups.append(chat)
-        # except:
-            # continue
-
-
-    # with TelegramClient(name, api_id, api_hash) as client:
-        # await print("INSIDE")
-        
-    # result = client(GetDialogsRequest(
-                 # offset_date=last_date,
-                 # offset_id=0,
-                 # offset_peer=InputPeerEmpty(),
-                 # limit=chunk_size,
-                 # hash = 0
-             # ))
-    #chats.extend(result.chats)
-
-
-    # ...
-    # with TelegramClient('anon', api_id, api_hash) as client:
-        # result = client(functions.messages.AddChatUserRequest(
-            # chat_id=chatid,
-            # user_id='username',
-            # fwd_limit=42
-        # ))
-        # print(result.stringify())
-
-    # ...
-    #print("Hello world! (2)")
-            
-            
-    # ...
-    #print("Hello world! (end)")
     
     # ...
     #print("\nTESTING: 'main' ending ...\n")
-    
-    
-    
-    
     
     
     
