@@ -109,7 +109,6 @@ cpass.read('config.data')
 api_id = cpass['cred']['id']
 api_hash = cpass['cred']['hash']
 phone = cpass['cred']['phone']
-client = TelegramClient(phone, api_id, api_hash)
 
 print("ID:" + api_id)
 print("api_hash:" + api_hash)
@@ -120,3 +119,24 @@ client = TelegramClient(phone, api_id, api_hash)
 
 # ...
 print("Hello world! (2)")
+
+# ...
+result = client(GetDialogsRequest(
+             offset_date=last_date,
+             offset_id=0,
+             offset_peer=InputPeerEmpty(),
+             limit=chunk_size,
+             hash = 0
+         ))
+chats.extend(result.chats)
+
+for chat in chats:
+    try:
+        if chat.megagroup== True:
+            groups.append(chat)
+    except:
+        continue
+        
+        
+# ...
+print("Hello world! (end)")
