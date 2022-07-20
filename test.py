@@ -200,14 +200,14 @@ async def main():
     
     
     for group in groups:
-        print("Trying" + group.title)
+        print("Trying " + group.title)
         
         try:
         
             all_participants = []
             all_participants = await client.get_participants(group, aggressive=True)
         except:
-            exitProgramWithError("You don't have the permission.")
+            exitProgramWithError("    This group requires admin access")
             
     #print(''.join(groups))
     
