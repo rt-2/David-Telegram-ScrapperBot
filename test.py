@@ -12,6 +12,8 @@
 import os, sys
 import configparser
 from telethon.sync import TelegramClient
+from telethon.tl.functions.messages import GetDialogsRequest
+from telethon.tl.types import InputPeerEmpty
 
 
 #
@@ -56,13 +58,15 @@ def banner():
 #   Main
 #
 # ...
-banner()
+print("Initialyzing...")
 # ...
 print(gr+"[+] Installing requierments ...")
 os.system('python3 -m pip install telethon')
 os.system('pip3 install telethon')
 # ...
 banner()
+# ...
+print("Initialyzed.")
 # ...
 #os.system("notepad config.data") # no need for that in windows
 
@@ -87,7 +91,7 @@ banner()
 
 
 # ...
-print("Hello world! (1)")
+#print("Hello world! (1)")
 
 
 # ...
