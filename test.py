@@ -33,7 +33,6 @@ STR_BANNER_2 = f"""             _                     _       ____
 TESTS_ONLY_MEGAGROUPS = not TESTS_TESTING
 TESTS_CHECK_UPDATES = not TESTS_TESTING
 UI_SWITCH_PAGES = True
-UI_SWITCH_PAGES = (UI_SWITCH_PAGES , False)[TESTS_TESTING]
 CLSANDSHOWBANNER_FORCECLS_FALSE = 0
 CLSANDSHOWBANNER_FORCECLS_TRUE = 1
 # Var(s)
@@ -82,21 +81,23 @@ def exitProgramWithError(message):
 #
 #   Init(s)
 #
-# ...
+print("Initialyzing ...")
+# Import(s)
 import os, sys
-# ...
+# Var(s)
+UI_SWITCH_PAGES = (UI_SWITCH_PAGES , False)[TESTS_TESTING]
+# Init(s)
 clsAndShowBanner(CLSANDSHOWBANNER_FORCECLS_TRUE)
 
 #
 #   Installs(s)
 #
-print("Initialyzing ...")
 # ...
 print("Installing requirements ...")
 if TESTS_CHECK_UPDATES :
-    os.system('python3 -m pip install telethon')
-    os.system('pip3 install configparser')
-    os.system('pip3 install telethon')
+    os.system('python -m pip install telethon')
+    os.system('pip install configparser')
+    os.system('pip install telethon')
 
 #
 #   Import(s)
