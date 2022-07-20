@@ -40,8 +40,7 @@ def exitProgram():
 
 # Send Error
 def exitProgramWithError(message):
-    os.system('clear')
-    clsAndShowBanner()
+    #clsAndShowBanner()
     print("\n\nERROR:")
     print(message)
     exitProgram()
@@ -77,7 +76,7 @@ import configparser
 import csv
 import time
 import asyncio
-from telethon.sync import TelegramClient
+from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
 
@@ -86,6 +85,10 @@ from telethon.tl.types import InputPeerEmpty
 #   Var(s)
 #
 # ...
+api_id = None
+api_hash = None
+phone = None
+name = None
 last_date = None
 chunk_size = 200
 groups=[]
@@ -136,33 +139,8 @@ print("Initialyzed.")
 # ...
 #print("Hello world! (1)")
 
-
-# Parsing config file
-print(" Parsing config file ...")
-cpass = configparser.RawConfigParser()
-cpass.read('config.data')
-
-# Storing config var(s)
-try:
-    # ...
-    api_id = cpass['cred']['id']
-    api_hash = cpass['cred']['hash']
-    phone = cpass['cred']['phone']
-    name = "testName"
-
-    print("ID:" + api_id)
-    print("api_hash:" + api_hash)
-    print("phone:" + phone)
-    print("name:" + name)
-
-    #client = TelegramClient('anon', api_id, api_hash)
-    #client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
-except Exception :
-    exitProgramWithError("File 'config.data' not formatted correctly.")
-
-
 # Main/All?
-def main():
+async def main():
 
     # ...
     print("\nTESTING: 'main' starting ...\n")
@@ -170,16 +148,29 @@ def main():
     # ...
     print("TESTING: 'main' started.")
 
-    # Connecting
+
+    # Parsing config file
+    print(" Parsing config file ...")
+    cpass = configparser.RawConfigParser()
+    cpass.read('config.data')
+
+    # Storing config var(s)
     try:
         # ...
-        with TelegramClient(phone, api_id, api_hash) as client:
-            print("INSIDE")
-            
-        #client = TelegramClient(phone, api_id, api_hash)
-        #client.connect()
+        api_id = cpass['cred']['id']
+        api_hash = cpass['cred']['hash']
+        phone = cpass['cred']['phone']
+        name = "testName"
+
+        print("ID:" + api_id)
+        print("api_hash:" + api_hash)
+        print("phone:" + phone)
+        print("name:" + name)
+
+        #client = TelegramClient('anon', api_id, api_hash)
+        #client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
     except Exception :
-        exitProgramWithError("Cannot connect to Telegram API.")
+        exitProgramWithError("File 'config.data' not formatted correctly.")
 
     # Verifying auth
     if not client.is_user_authorized():
@@ -188,6 +179,23 @@ def main():
         os.system('clear')
         banner()
         client.sign_in(phone, input(gr+'[+] Enter the verification code: '+yo))
+        sys.exit(1)
+
+    # Connecting
+    try:
+        # ...
+
+        print("test1")
+        client = TelegramClient(name, api_id, api_hash)
+        print("test2")
+        await client.start()
+        print("test3")
+            
+        #client = TelegramClient(phone, api_id, api_hash)
+        #client.connect()
+    except Exception :
+        exitProgramWithError("Cannot connect to Telegram API.")
+
 
 
     # async with TelegramClient(name, api_id, api_hash) as client:
@@ -211,13 +219,13 @@ def main():
     # with TelegramClient(name, api_id, api_hash) as client:
         # await print("INSIDE")
         
-    result = client(GetDialogsRequest(
-                 offset_date=last_date,
-                 offset_id=0,
-                 offset_peer=InputPeerEmpty(),
-                 limit=chunk_size,
-                 hash = 0
-             ))
+    # result = client(GetDialogsRequest(
+                 # offset_date=last_date,
+                 # offset_id=0,
+                 # offset_peer=InputPeerEmpty(),
+                 # limit=chunk_size,
+                 # hash = 0
+             # ))
     #chats.extend(result.chats)
 
 
@@ -268,7 +276,7 @@ def main():
 #   executing 'main'
 #
 
-main()
+asyncio.get_event_loop().run_until_complete(main())
 
 
 #task = loop.create_task(main())
