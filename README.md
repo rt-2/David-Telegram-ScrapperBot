@@ -5,3 +5,6 @@ This is a fork from <https://github.com/AbirHasan2005/TelegramScraper> on Jul 5,
 # Intent
 This is just a POC for David
 
+# Testing
+This has been tested on python 3.8.10 64bit on Win7.
+
