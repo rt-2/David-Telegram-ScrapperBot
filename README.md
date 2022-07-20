@@ -8,3 +8,7 @@ This is just a POC for David
 # Testing
 This has been tested on python 3.8.10 64bit on Win7.
 
+
+# Requirements
+SQLite must be installed. (I installed it with this tuto btw: <https://www.sqlitetutorial.net/download-install-sqlite/>)
+
