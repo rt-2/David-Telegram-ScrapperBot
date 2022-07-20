@@ -97,13 +97,11 @@ if TESTS_CHECK_UPDATES :
     os.system('python3 -m pip install telethon')
     os.system('pip3 install configparser')
     os.system('pip3 install telethon')
-    os.system('pip3 install asyncio')
 
 #
 #   Import(s)
 #
 import configparser
-import asyncio
 from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty
