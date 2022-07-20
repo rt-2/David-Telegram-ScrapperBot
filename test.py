@@ -134,8 +134,7 @@ print(" Parsing config file ...")
 cpass = configparser.RawConfigParser()
 cpass.read('config.data')
 
-
-
+# Storing config var(s)
 try:
     # ...
     api_id = cpass['cred']['id']
@@ -153,17 +152,22 @@ try:
 except Exception :
     exitProgramWithError("File 'config.data' not formatted correctly.")
 
+# Connecting
+try:
+    # ...
+    client = TelegramClient(phone, api_id, api_hash)
+    client.connect()
+except Exception :
+    exitProgramWithError("Cannot connect to Telegram API.")
 
 # ...
-client = TelegramClient(phone, api_id, api_hash)
-client.connect()
-# with TelegramClient(name, api_id, api_hash) as client:
-   # result = client(functions.messages.AddChatUserRequest(
+# with TelegramClient('anon', api_id, api_hash) as client:
+    # result = client(functions.messages.AddChatUserRequest(
         # chat_id=chatid,
         # user_id='username',
         # fwd_limit=42
     # ))
-# print(result.stringify())
+    # print(result.stringify())
 
 # ...
 print("Hello world! (2)")
