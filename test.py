@@ -85,8 +85,11 @@ from telethon.tl.types import InputPeerEmpty
 #   Var(s)
 #
 # ...
+TELEGRAM_TEST_IP = '149.154.167.40'
+TELEGRAM_TEST_PORT = 80
 api_id = None
 api_hash = None
+bot_token = None
 phone = None
 name = None
 last_date = None
@@ -140,6 +143,55 @@ print("Initialyzed.")
 #print("Hello world! (1)")
 
 # Main/All?
+
+# Parsing config file
+print(" Parsing config file ...")
+cpass = configparser.RawConfigParser()
+cpass.read('config.data')
+
+# Storing config var(s)
+try:
+    # ...
+    api_id = cpass['cred']['app_id']
+    api_hash = cpass['cred']['hash']
+    bot_token = api_id + ":" + api_hash
+    phone = cpass['cred']['phone']
+    name = "testName"
+
+    print("ID:" + api_id)
+    print("api_hash:" + api_hash)
+    print("bot_token:" + bot_token)
+    print("phone:" + phone)
+    print("name:" + name)
+
+    #client = TelegramClient('anon', api_id, api_hash)
+    #client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
+except Exception :
+    exitProgramWithError("File 'config.data' not formatted correctly.")
+
+# Connecting
+try:
+    # ...
+
+    # print("test1")
+    # #client = TelegramClient(name, api_id, api_hash)
+    # print("test2")
+    # #await client.start()
+    # print("test3")
+    #client = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
+    # print("test4")
+    # client = TelegramClient(None, api_id, api_hash)
+    # client.session.set_dc(2, TELEGRAM_TEST_IP, TELEGRAM_TEST_PORT)
+    # client.start(
+        # phone='9996621234', code_callback=lambda: '22222'
+    # )
+        
+    client = TelegramClient(name, api_id, api_hash)
+    #client.connect()
+except Exception :
+    exitProgramWithError("Cannot connect to Telegram API.")
+
+
 async def main():
 
     # ...
@@ -149,62 +201,20 @@ async def main():
     print("TESTING: 'main' started.")
 
 
-    # Parsing config file
-    print(" Parsing config file ...")
-    cpass = configparser.RawConfigParser()
-    cpass.read('config.data')
 
-    # Storing config var(s)
-    try:
-        # ...
-        api_id = cpass['cred']['id']
-        api_hash = cpass['cred']['hash']
-        bot_token = cpass['cred']['bot_token']
-        phone = cpass['cred']['phone']
-        name = "testName"
-
-        print("ID:" + api_id)
-        print("api_hash:" + api_hash)
-        print("bot_token:" + bot_token)
-        print("phone:" + phone)
-        print("name:" + name)
-
-        #client = TelegramClient('anon', api_id, api_hash)
-        #client = TelegramClient('anon', api_id, api_hash, proxy=("socks5", '127.0.0.1', 4444))
-    except Exception :
-        exitProgramWithError("File 'config.data' not formatted correctly.")
-
-
-    # Connecting
-    try:
-        # ...
-
-        # print("test1")
-        # #client = TelegramClient(name, api_id, api_hash)
-        # print("test2")
-        # #await client.start()
-        # print("test3")
-        # bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
-        # print("test4")
-        client = TelegramClient(None, api_id, api_hash)
-        client.session.set_dc(2, '149.154.167.40', 80)
-        client.start(
-            phone='9996621234', code_callback=lambda: '22222'
-        )
-            
-        #client = TelegramClient(phone, api_id, api_hash)
-        #client.connect()
-    except Exception :
-        exitProgramWithError("Cannot connect to Telegram API.")
 
     # Verifying auth
-    if not client.is_user_authorized():
-        #exitProgramWithError("Account not authorized.")
-        client.send_code_request(phone)
-        os.system('clear')
-        banner()
-        client.sign_in(phone, input(gr+'[+] Enter the verification code: '+yo))
-        sys.exit(1)
+    # if not client.is_user_authorized():
+        # #exitProgramWithError("Account not authorized.")
+        # client.send_code_request(phone)
+        # os.system('clear')
+        # banner()
+        # client.sign_in(phone, input(gr+'[+] Enter the verification code: '+yo))
+        # sys.exit(1)
+
+
+    me = await client.get_me()
+
 
 
     # async with TelegramClient(name, api_id, api_hash) as client:
@@ -285,8 +295,10 @@ async def main():
 #   executing 'main'
 #
 
-asyncio.get_event_loop().run_until_complete(main())
-
+#asyncio.get_event_loop().run_until_complete(main())
+#asyncio.run(main())
+with client:
+    client.loop.run_until_complete(main())
 
 #task = loop.create_task(main())
 #loop.run_until_complete(task)
