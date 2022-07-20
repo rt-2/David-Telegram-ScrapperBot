@@ -4,3 +4,5 @@ config.data
 test-build/start.bat
 test-build/test-build.7z
 test-build/test.py
+*.sqlite
+.vs/ProjectSettings.json

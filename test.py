@@ -305,4 +305,4 @@ with client:
     client.loop.run_until_complete(main())
 
 # Print good bye
-print(colorama.Fore.CYAN + "\nExecution over, good bye!\n")
+print(colorama.Fore.CYAN + "\nExecution over, good bye!\n\n")
