@@ -61,7 +61,7 @@ clsAndShowBanner()
 print("Initialyzing ...")
 # ...
 print("Installing requierments ...")
-os.system('python3 -m pip install telethon')
+#os.system('python3 -m pip install telethon')
 os.system('pip3 install telethon')
 #os.system('pip3 install colorama')
 os.system('pip3 install python-socks')
@@ -165,6 +165,11 @@ except Exception :
 # Main/All?
 async def main():
 
+    # ...
+    print("\nTESTING: 'main' starting ...\n")
+
+
+
     with TelegramClient(name, api_id, api_hash) as client:
         print("INSIDE")
 
@@ -233,6 +238,8 @@ async def main():
     # ...
     print("Hello world! (end)")
     
+    # ...
+    print("\nTESTING: 'main' ending ...\n")
     
     
     
@@ -245,7 +252,7 @@ async def main():
 #   executing 'main'
 #
 
-asyncio.run_coroutine_threadsafe(main(), asyncio.new_event_loop())
+#asyncio.run_coroutine_threadsafe(main(), asyncio.new_event_loop())
 
 
 #task = loop.create_task(main())
