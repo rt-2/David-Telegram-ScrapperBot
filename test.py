@@ -86,6 +86,7 @@ from telethon.tl.types import InputPeerEmpty
 # ...
 TELEGRAM_TEST_IP = '149.154.167.40'
 TELEGRAM_TEST_PORT = 80
+ONLY_MEGA_GROUPS = False
 api_id = None
 api_hash = None
 bot_token = None
@@ -155,10 +156,8 @@ except Exception :
 async def main():
 
     # ...
-    print("\nTESTING: 'main' starting ...\n")
+    print("TESTING: 'main' starting ...\n")
 
-    # ...
-    print("TESTING: 'main' started.")
 
 
 
@@ -173,7 +172,7 @@ async def main():
         # sys.exit(1)
 
 
-    me = await client.get_me()
+    #me = await client.get_me()
     #print(me.stringify())
 
 
@@ -187,15 +186,13 @@ async def main():
         ))
     chats.extend(result.chats)
     
-    print("\nList of chat (" + str(len(chats)) + "):")
+    print("\nList of chat (%d):" % (len(chats)) )
     for chat in chats:
         try:
             megaOrNot = chat.megagroup
-            print(" chat ({megaOrNot}): " + str(chat.title))
-            
-            if chat.megagroup== True:
+            print(f" chat ({megaOrNot}): " + str(chat.title))
+            if chat.megagroup == True or ONLY_MEGA_GROUPS == False:
                 groups.append(chat)
-                print(' chat: ' + str(chat.title))
                 
         except:
             continue
@@ -205,9 +202,12 @@ async def main():
     for group in groups:
         print("Trying" + group.title)
         
+        try:
         
-        all_participants = []
-        all_participants = await client.get_participants(group, aggressive=True)
+            all_participants = []
+            all_participants = await client.get_participants(group, aggressive=True)
+        except:
+            exitProgramWithError("You don't have the permission.")
             
     #print(''.join(groups))
     
