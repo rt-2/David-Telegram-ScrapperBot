@@ -16,8 +16,26 @@ TELEGRAM_TEST_PORT = 80
 STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
 STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
 STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
+STR_BANNER_1 = f"""            
+        ____              _     ___          ______     __     ____        __ 
+       / __ \____ __   __(_)___/ ( )_____   /_  __/__  / /__  / __ )____  / /_
+      / / / / __ `/ | / / / __  /|// ___/    / / / _ \/ / _ \/ __  / __ \/ __/
+     / /_/ / /_/ /| |/ / / /_/ /  (__  )    / / /  __/ /  __/ /_/ / /_/ / /_  
+    /_____/\__,_/ |___/_/\__,_/  /____/    /_/  \___/_/\___/_____/\____/\__/  
+                                                                            """
+STR_BANNER_2 = f"""             _                     _       ____  
+            | |__  _   _      _ __| |_    |___ \ 
+            | '_ \| | | |    | '__| __|____ __) |
+            | |_) | |_| |    | |  | ||_____/ __/ 
+            |_.__/ \__, |    |_|   \__|   |_____|
+                   |___/                      
+	"""
 TESTS_ONLY_MEGAGROUPS = not TESTS_TESTING
 TESTS_CHECK_UPDATES = not TESTS_TESTING
+UI_SWITCH_PAGES = True
+UI_SWITCH_PAGES = (UI_SWITCH_PAGES , False)[TESTS_TESTING]
+CLSANDSHOWBANNER_FORCECLS_FALSE = 0
+CLSANDSHOWBANNER_FORCECLS_TRUE = 1
 # Var(s)
 api_id = None
 api_hash = None
@@ -26,35 +44,27 @@ phone = None
 name = None
 last_date = None
 chunk_size = 200
-groups=[]
+groups = []
 chats = []
-
+dialogs = []
 
 #
 #   Function(s)
 #
 # Show Banner
-def clsAndShowBanner():
+def clsAndShowBanner(forceCls = CLSANDSHOWBANNER_FORCECLS_FALSE):
     # Clear terminal
-	os.system('cls')
-    # App name
-	print(f"""            
-        ____              _     ___          ______     __     ____        __ 
-       / __ \____ __   __(_)___/ ( )_____   /_  __/__  / /__  / __ )____  / /_
-      / / / / __ `/ | / / / __  /|// ___/    / / / _ \/ / _ \/ __  / __ \/ __/
-     / /_/ / /_/ /| |/ / / /_/ /  (__  )    / / /  __/ /  __/ /_/ / /_/ / /_  
-    /_____/\__,_/ |___/_/\__,_/  /____/    /_/  \___/_/\___/_____/\____/\__/  
-                                                                            """)
-    # Credits
-	print(f"""             _                     _       ____  
-            | |__  _   _      _ __| |_    |___ \ 
-            | '_ \| | | |    | '__| __|____ __) |
-            | |_) | |_| |    | |  | ||_____/ __/ 
-            |_.__/ \__, |    |_|   \__|   |_____|
-                   |___/                      
-               
-               
-	""")
+    if(UI_SWITCH_PAGES or forceCls == CLSANDSHOWBANNER_FORCECLS_TRUE):
+        os.system('cls')
+        # Space(s)
+        print("\n")
+        # App name
+        print(STR_BANNER_1)
+        # Credits
+        print(STR_BANNER_2)
+        # Space(s)
+        print("\n")
+        print("\n")
     
 # Exit Program
 def exitProgram():
@@ -75,7 +85,7 @@ def exitProgramWithError(message):
 # ...
 import os, sys
 # ...
-clsAndShowBanner()
+clsAndShowBanner(CLSANDSHOWBANNER_FORCECLS_TRUE)
 
 #
 #   Installs(s)
@@ -122,19 +132,21 @@ async def main():
     #me = await client.get_me()
     #print(me.stringify())
 
-
+    clsAndShowBanner()
+    
     # async with TelegramClient(name, api_id, api_hash) as client:
-    result = await client(GetDialogsRequest(
+    dialogs = await client(GetDialogsRequest(
             offset_date=last_date,
             offset_id=0,
             offset_peer=InputPeerEmpty(),
             limit=chunk_size,
             hash = 0
         ))
-    chats.extend(result.chats)
+    chats.extend(dialogs.chats)
     
     # ...
     print("\nList of chats (%d):" % (len(chats)) )
+    print("")
     for chat in chats:
         try:
             # Var(s)
@@ -154,19 +166,17 @@ async def main():
             else :
                 # Is NOT a megagroup and therefore ignored
                 print("          EXLUDED")
+            print("")
                 
                 
         except:
             continue
-    print("")
+    print("\n")
     
+    clsAndShowBanner()
     
     # ...
-    print("")
-    print("")
-    print("")
-    print("Scraping members from choosen groups(%d)  :" % len(groups))
-    print("")
+    print("Scraping members from choosen groups(%d)  :\n" % len(groups))
     # ...
     for group in groups:
     
@@ -182,8 +192,7 @@ async def main():
         print("      " + "Gathered %d members" % len(group_members))
         print("")
         
-    print("")
-    print("")
+    print("\n")
     
     # ...
     #print("\nTESTING: 'main' ending ...\n")
@@ -196,7 +205,7 @@ async def main():
 #
 # Init(s)
 # ...
-clsAndShowBanner()
+clsAndShowBanner(CLSANDSHOWBANNER_FORCECLS_TRUE)
 # ...
 print("Initialyzed.")
 
@@ -241,4 +250,4 @@ with client:
     client.loop.run_until_complete(main())
 
 # Print good bye
-print("\n\n\nExecution over, good bye!\n\n")
+print("\nExecution over, good bye!\n")
