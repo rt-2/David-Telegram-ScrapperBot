@@ -204,9 +204,10 @@ try:
     Constants.ADDTIME_RANDOM = int(rates_list['time_random'])
 
     # ...
-    printl(1, "\nConfigurations :")
+    print("\n")
+    UI.printl(1, "Configurations :")
     for k, v in asked_config.items():
-        printl(2, "%s:   %s ;" % (k, v))
+        UI.printl(2, "%s:   %s ;" % (k, v))
     print("\n")
     
     
