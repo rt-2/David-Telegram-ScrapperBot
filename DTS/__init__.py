@@ -203,9 +203,8 @@ async def inviteAllMember(args):
             UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
             time.sleep(Constants.ADDTIME_WAIT)
         except FloodWaitError as e:
-            time_left = int(re.sub('\D', '', str(e)[10:20]))
             UI.printl(2, "Getting Flood Error from telegram. Script is stopping now.", colorama.Fore.RED)
-            UI.printl(2, "Waiting %d seconds. %d seconds until unban ..." % (Constants.ADDTIME_WAIT, time_left), colorama.Fore.YELLOW)
+            UI.printl(2, "Waiting %d seconds. %d seconds until unban ..." % (Constants.ADDTIME_WAIT, e.seconds), colorama.Fore.YELLOW)
             time.sleep(Constants.ADDTIME_WAIT)
         except UserPrivacyRestrictedError:
             wait_sec = 5

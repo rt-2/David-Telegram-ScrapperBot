@@ -219,6 +219,7 @@ except Exception :
 try:
     # ...
     client = TelegramClient(asked_config['name'], asked_config['api_id'], asked_config['api_hash'])
+    client.flood_sleep_threshold = 0
     #client.session.set_dc(dc_id, '149.154.167.40', 443)
 except Exception as e :
     # ...
