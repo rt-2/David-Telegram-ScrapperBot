@@ -1,5 +1,4 @@
 
-config.data
 *.session
 test-build/start.bat
 test-build/test-build.7z
@@ -16,3 +15,4 @@ testName.session-journal
 DTS/__pycache__/__init__.cpython-38.pyc
 DTS/__pycache__/verify.cpython-38.pyc
 UI/__pycache__/__init__.cpython-38.pyc
+config.data

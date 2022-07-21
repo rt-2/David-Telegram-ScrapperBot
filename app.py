@@ -198,6 +198,11 @@ try:
     asked_config["phone"] = asked_config["phone"].replace(" ", "").replace("-", "")
     asked_config["name"] = "testName"
 
+    rates_list = dict(conf_parser.items("cred"));
+    Constants.ADDTIME_EACH = rates_list['']
+    Constants.ADDTIME_WAIT = rates_list['']
+    Constants.ADDTIME_RANDOM = rates_list['']
+
     # ...
     print("\nConfigurations :")
     for k, v in asked_config.items():

@@ -200,9 +200,15 @@ async def inviteAllMember(args):
             #time.sleep(random.randrange(0, 5))
         except PeerFloodError:
             UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
+            traceback.print_exc()
             time.sleep(Constants.ADDTIME_WAIT)
-        except FloodWaitError:
+        except FloodWaitError as e:
             UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
+            print(str(e))
+            print(str(e)[10:20])
+            #print(int(str(e)[10:20]))
+
+
             time.sleep(Constants.ADDTIME_WAIT)
         except UserPrivacyRestrictedError:
             UI.printl(2, "The user's privacy settings do not allow you to do this. Skipping ...")
