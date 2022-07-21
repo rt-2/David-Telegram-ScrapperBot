@@ -187,6 +187,7 @@ async def inviteAllMember(args):
     for user in all_participants_from:
         n += 1
         if n % 80 == 0:
+            UI.printl(2, "Waiting %d seconds ..." % Constants.ADDTIME_EACH, colorama.Fore.BLUE)
             time.sleep(Constants.ADDTIME_RANDOM)
             pass
         try:
@@ -226,6 +227,7 @@ async def inviteAllMember(args):
             continue
            
         # ...
+        UI.printl(2, "Waiting %d seconds ..." % Constants.ADDTIME_EACH, colorama.Fore.BLUE)
         time.sleep(Constants.ADDTIME_EACH)
 
     

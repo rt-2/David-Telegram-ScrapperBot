@@ -198,7 +198,7 @@ try:
     asked_config["phone"] = asked_config["phone"].replace(" ", "").replace("-", "")
     asked_config["name"] = "testName"
     # ...
-    rates_list = dict(conf_parser.items("rates"));
+    rates_list = dict(conf_parser.items("intervals"));
     Constants.ADDTIME_EACH = int(rates_list['time_all'])
     Constants.ADDTIME_WAIT = int(rates_list['time_error'])
     Constants.ADDTIME_RANDOM = int(rates_list['time_random'])
