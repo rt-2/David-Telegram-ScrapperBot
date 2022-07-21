@@ -193,15 +193,15 @@ try:
     conf_parser = configparser.RawConfigParser()
     conf_parser.read("config.data")
     # ...
-    asked_config.update(dict(conf_parser.items("cred")))
+    asked_config.update(dict(conf_parser.items("creds")))
     asked_config["bot_token"] = asked_config["api_id"] + ":" + asked_config["api_hash"]
     asked_config["phone"] = asked_config["phone"].replace(" ", "").replace("-", "")
     asked_config["name"] = "testName"
-
-    rates_list = dict(conf_parser.items("cred"));
-    Constants.ADDTIME_EACH = rates_list['']
-    Constants.ADDTIME_WAIT = rates_list['']
-    Constants.ADDTIME_RANDOM = rates_list['']
+    # ...
+    rates_list = dict(conf_parser.items("rates"));
+    Constants.ADDTIME_EACH = int(rates_list['time_all'])
+    Constants.ADDTIME_WAIT = int(rates_list['time_error'])
+    Constants.ADDTIME_RANDOM = int(rates_list['time_random'])
 
     # ...
     print("\nConfigurations :")

@@ -7,7 +7,7 @@ import os, sys
 import DTS.verify
 from DTS import Constants
 
-import time, traceback
+import time, traceback, re
 import UI
 import colorama
 from telethon import TelegramClient, events
@@ -203,21 +203,23 @@ async def inviteAllMember(args):
             traceback.print_exc()
             time.sleep(Constants.ADDTIME_WAIT)
         except FloodWaitError as e:
-            UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
-            print(str(e))
-            print(str(e)[10:20])
-            #print(int(str(e)[10:20]))
+            time_left = int(re.sub('\D', '', str(e)[10:20]))
+            
+            UI.printl(2, "Getting Flood Error from telegram. Script is stopping now.", colorama.Fore.RED)
+            
+            UI.printl(2, "Waiting %d seconds. %d seconds until unban ..." % Constants.ADDTIME_WAIT, time_left, colorama.Fore.YELLOW)
+            
 
 
             time.sleep(Constants.ADDTIME_WAIT)
         except UserPrivacyRestrictedError:
-            UI.printl(2, "The user's privacy settings do not allow you to do this. Skipping ...")
-            UI.printl(2, "Waiting for 5 Seconds ...")
-            time.sleep(5)
+            wait_sec = 5
+            UI.printl(2, "The user's privacy settings do not allow you to do this. Skipping in %d Seconds ..." % wait_sec, colorama.Fore.YELLOW)
+            time.sleep(wait_sec)
         except UserChannelsTooMuchError:
-            UI.printl(2, "the users you tried to add is already in too many channels/supergroups ...")
-            UI.printl(2, "Waiting for 3 Seconds ...")
-            time.sleep(3)
+            wait_sec = 3
+            UI.printl(2, "the users you tried to add is already in too many channels/supergroups. Waiting for %d Seconds ..." % wait_sec, colorama.Fore.YELLOW)
+            time.sleep(wait_sec)
         except:
             traceback.print_exc()
             UI.printl(2, "Unexpected Error! ")
