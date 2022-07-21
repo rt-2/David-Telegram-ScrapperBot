@@ -207,7 +207,7 @@ async def inviteAllMember(args):
             
             UI.printl(2, "Getting Flood Error from telegram. Script is stopping now.", colorama.Fore.RED)
             
-            UI.printl(2, "Waiting %d seconds. %d seconds until unban ..." % Constants.ADDTIME_WAIT, time_left, colorama.Fore.YELLOW)
+            UI.printl(2, "Waiting %d seconds. %d seconds until unban ..." % (Constants.ADDTIME_WAIT, time_left), colorama.Fore.YELLOW)
             
 
 
