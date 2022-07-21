@@ -5,6 +5,8 @@
 # Import(s)
 import os, sys
 import DTS.verify
+from DTS import Constants
+
 import colorama
 
 
@@ -12,8 +14,6 @@ import colorama
 #   Var(s)
 #
 # Constant(s)
-RESETBANNER_DEFAULT = -1
-RESETBANNER_FORCE_CLEAR = 1
 STR_BANNER_1 = f"""            
         ____              _     ___          ______     __     ____        __ 
        / __ \____ __   __(_)___/ ( )_____   /_  __/__  / /__  / __ )____  / /_
@@ -37,7 +37,7 @@ STR_BANNER_2 = f"""             _                     _       ____
 # Show Banner
 def resetBanner(forceCls = False):
     # Clear terminal
-    if(os.environ["UI_SWITCH_PAGES"] == "True" or forceCls == True):
+    if(Constants.UI_SWITCH_PAGES == True or forceCls == True):
         os.system('cls')
         # Color IN
         print(colorama.Fore.CYAN)

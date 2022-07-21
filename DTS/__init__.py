@@ -5,8 +5,9 @@
 # Import(s)
 import os, sys
 import DTS.verify
+from DTS import Constants
 
-import time
+import time, traceback
 import UI
 import colorama
 from telethon import TelegramClient, events
@@ -16,13 +17,6 @@ from telethon.tl.functions.channels import GetParticipantsRequest, InviteToChann
 from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
 
 
-#
-#   Var(s)
-#
-# Constant(s)
-DIALOGREQ_LASTDATE = None
-DIALOGREQ_CHUNKSIZE = 200
-# Var(s)
 
 #
 #   Function(s)
@@ -61,11 +55,11 @@ async def getChatList(client):
     chats = []
     #
     dialogs = await client(GetDialogsRequest(
-            offset_date=DIALOGREQ_LASTDATE,
-            offset_id=0,
-            offset_peer=InputPeerEmpty(),
-            limit=DIALOGREQ_CHUNKSIZE,
-            hash = 0
+            offset_date = Constants.TELETHON_REQUEST_LASTDATE,
+            offset_id = Constants.TELETHON_REQUEST_OFFSETID,
+            offset_peer = InputPeerEmpty(),
+            limit = Constants.TELETHON_REQUEST_CHUNKSIZE,
+            hash = Constants.TELETHON_REQUEST_HASH
         ))
     chats.extend(dialogs.chats)
     
@@ -95,7 +89,7 @@ async def checkChatList(chats):
             UI.printl(2, "(%d members, %s)" % (memberNb, megaOrNotStr) )
             #print(str(chat) + " ;")
             # Test(s)
-            if (megaOrNot == True or os.environ["TESTS_ONLY_MEGAGROUPS"] == "False") :
+            if (megaOrNot == True or Constants.TESTS_ONLY_MEGAGROUPS == False) :
                 #print(" Yes ;")
                 # Is a mega group, or it's ignored for tests
                 groups.append(chat)
@@ -157,7 +151,7 @@ async def getMemberList(args):
         #print(group_from.access_hash)
 
         while True:
-            participants = await client(GetParticipantsRequest(InputChannel(group_from.id, group_from.access_hash), my_filter, offset, limit, Constants.PARTICIPANTREQUEST_HASH))
+            participants = await client(GetParticipantsRequest(InputChannel(group_from.id, group_from.access_hash), my_filter, offset, limit, Constants.TELETHON_REQUEST_HASH))
             all_participants_from.extend(participants.users)
             offset += len(participants.users)
             if len(participants.users) < limit:
@@ -198,7 +192,8 @@ async def inviteAllMember(args):
             user_to_add = InputPeerUser(user.id, user.access_hash)
             #print(user.id)
             #print(user.access_hash)
-            await client(InviteToChannelRequest(group_to, [user_to_add]))
+            if not Constants.TESTS_TESTING:
+                await client(InviteToChannelRequest(group_to, [user_to_add]))
             #print("Waiting for 60-180 Seconds ...")
             #time.sleep(random.randrange(0, 5))
         except PeerFloodError:

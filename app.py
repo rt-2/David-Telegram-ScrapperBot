@@ -10,13 +10,14 @@
 #   Init(s)
 #
 print("Initialyzing ...")
-import DTS.verify
 # Import(s)
 import os, sys
+import DTS.verify
 import DTS, UI
+from DTS import Constants
+
 import configparser
 import colorama
-from DTS import Constants
 from telethon import TelegramClient, events
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser, InputChannel, ChannelParticipantsSearch
 from telethon.tl.functions.channels import GetParticipantsRequest, InviteToChannelRequest
@@ -28,7 +29,6 @@ from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedEr
 #   Var(s)
 #
 # Constant(s)
-TESTS_TESTING = False
 TELEGRAM_TEST_IP = '149.154.167.40'
 TELEGRAM_TEST_PORT = 443
 TELEGRAM_PROD_IP = '149.154.167.50'
@@ -38,7 +38,6 @@ STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
 STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
 os.environ["STR_GROUP_INVALIDNUMBER"] = "Please enter a valid number"
 os.environ["STR_GROUP_SAMENUMBER"] = "Cannot choose the same group"
-os.environ["TESTS_ONLY_MEGAGROUPS"] = "True"
 TESTS_SHOW_BOT_SETTINGS = False
 os.environ["UI_SWITCH_PAGES"] = "True"
 # Var(s)
@@ -56,10 +55,10 @@ asked_config = {}
 #   Init(s)
 #
 # Var(s)
-TESTS_SHOW_BOT_SETTINGS = TESTS_SHOW_BOT_SETTINGS and TESTS_TESTING
+TESTS_SHOW_BOT_SETTINGS = TESTS_SHOW_BOT_SETTINGS and Constants.TESTS_TESTING
 
-#os.environ["TESTS_ONLY_MEGAGROUPS"] = (os.environ["TESTS_ONLY_MEGAGROUPS"], "False")[TESTS_TESTING]
-os.environ["UI_SWITCH_PAGES"] = (os.environ["UI_SWITCH_PAGES"], "False")[TESTS_TESTING]
+#Constants.TESTS_ONLY_MEGAGROUPS = (Constants.TESTS_ONLY_MEGAGROUPS, False)[Constants.TESTS_TESTING]
+Constants.UI_SWITCH_PAGES = (Constants.UI_SWITCH_PAGES, False)[Constants.TESTS_TESTING]
 # Init(s)
 
 
@@ -119,7 +118,9 @@ async def main():
     #members = await DTS.executeModule("Scraping members from choosen groups(%d)" % len(groups), DTS.getGroupList, groups)
     
     #all_participants_from = await DTS.getMemberList(group_from)
-    all_participants_from = await DTS.executeModule("Compiling members", DTS.getMemberList, [client, group_from])
+    all_participants_from = await DTS.executeModule("Compiling members (TO)", DTS.getMemberList, [client, group_from])
+    
+    all_participants_to = await DTS.executeModule("Compiling members (FROM)", DTS.getMemberList, [client, group_to])
     
     #print(str(all_participants_from[0]))
     # Reverse list to start by the end
@@ -129,10 +130,27 @@ async def main():
     # ...
     UI.resetBanner()
 
+    #print(type(all_participants_from))
+    
+    UI.printl(1, "Compiling members  :")
+    UI.printl(2, "Total members in origin groupe: %d" % len(all_participants_from))
+
+    all_participants_final = []
+    for participant in all_participants_from:
+        if participant not in all_participants_to:
+            all_participants_final.append(participant)
+        pass
+        
+    UI.printl(2, "Number of members in already in destination groupe: %d" % (len(all_participants_from) - len(all_participants_final)))
+
+    UI.printl(2, "Number of members to invite: %d" % len(all_participants_final))
+
+
+    #print(len(all_participants_final ))
 
 
     # ...
-    await DTS.executeModule("Inviting members", DTS.inviteAllMember, [client, all_participants_from, group_to])
+    await DTS.executeModule("Inviting members", DTS.inviteAllMember, [client, all_participants_final, group_to])
 
 
         
@@ -150,7 +168,8 @@ async def main():
 # ...
 colorama.init()
 # ...
-UI.resetBanner(UI.RESETBANNER_FORCE_CLEAR)
+sys.stdout.write("\x1b]2;%s\x07" % Constants.APP_TITLE)
+UI.resetBanner(True)
 # ...
 print("Initialyzed.\n")
 
@@ -202,7 +221,7 @@ except Exception as e :
 
 # Execute main
 with client:
-    #if(TESTS_TESTING): client.session.set_dc(2, TELEGRAM_TEST_IP, TELEGRAM_TEST_PORT)
+    #if(Constants.TESTS_TESTING): client.session.set_dc(2, TELEGRAM_TEST_IP, TELEGRAM_TEST_PORT)
     client.loop.run_until_complete(main())
     pass
 
