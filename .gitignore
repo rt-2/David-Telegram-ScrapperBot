@@ -13,3 +13,6 @@ testName.session-journal
 *.pyc
 *.pyc
 *.pyc
+DTS/__pycache__/__init__.cpython-38.pyc
+DTS/__pycache__/verify.cpython-38.pyc
+UI/__pycache__/__init__.cpython-38.pyc
