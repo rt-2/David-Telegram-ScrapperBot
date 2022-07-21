@@ -193,7 +193,7 @@ async def inviteAllMember(args):
         try:
             UI.printl(1, "[ %d / %d ] Adding %s %s (%d,%d) ;" % (n, len(all_participants_from), user.first_name, user.last_name, user.id, user.access_hash))
             user_to_add = InputPeerUser(user.id, user.access_hash)
-            print(str(user))
+            #print(str(user))
             #print(user.access_hash)
             if not Constants.TESTS_TESTING:
                 await client(InviteToChannelRequest(group_to, [user_to_add]))
