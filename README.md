@@ -17,8 +17,8 @@ api_hash = 1a2B3c4D5e6F7a8B9c0D1e2F3a4B5c6D
 phone = 1 213-123-4567
 
 [intervals]
-time_all = 90
-time_error = 100
-time_random = 60
+time_all = 120		# Time between each users (sec)
+time_error = 360	# Not used atm
+time_pause = 900	# Pause every 50 users (sec)
 ```
 

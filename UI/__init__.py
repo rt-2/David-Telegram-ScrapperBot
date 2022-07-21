@@ -5,7 +5,7 @@
 # Import(s)
 import os, sys
 import DTS.verify
-from DTS import Constants
+from DTS import Constants, Texts
 
 import colorama
 
@@ -14,20 +14,6 @@ import colorama
 #   Var(s)
 #
 # Constant(s)
-STR_BANNER_1 = f"""            
-        ____              _     ___          ______     __     ____        __ 
-       / __ \____ __   __(_)___/ ( )_____   /_  __/__  / /__  / __ )____  / /_
-      / / / / __ `/ | / / / __  /|// ___/    / / / _ \/ / _ \/ __  / __ \/ __/
-     / /_/ / /_/ /| |/ / / /_/ /  (__  )    / / /  __/ /  __/ /_/ / /_/ / /_  
-    /_____/\__,_/ |___/_/\__,_/  /____/    /_/  \___/_/\___/_____/\____/\__/  
-                                                                            """
-STR_BANNER_2 = f"""             _                     _       ____  
-            | |__  _   _      _ __| |_    |___ \ 
-            | '_ \| | | |    | '__| __|____ __) |
-            | |_) | |_| |    | |  | ||_____/ __/ 
-            |_.__/ \__, |    |_|   \__|   |_____|
-                   |___/                      
-    """
 
 
 #
@@ -44,9 +30,9 @@ def resetBanner(forceCls = False):
         # Space(s)
         print("\n")
         # App name
-        print(STR_BANNER_1)
+        print(Texts.STR_BANNER_1)
         # Credits
-        print(STR_BANNER_2)
+        print(Texts.STR_BANNER_2)
         # Color OUT
         print(colorama.Fore.RESET)
         # Space(s)

@@ -5,7 +5,7 @@
 # Import(s)
 import os, sys
 import DTS.verify
-from DTS import Constants
+from DTS import Constants, Texts
 
 import time, traceback, re
 import UI
@@ -17,6 +17,9 @@ from telethon.tl.functions.channels import GetParticipantsRequest, InviteToChann
 from telethon.errors.rpcerrorlist import PeerFloodError, FloodWaitError, UserPrivacyRestrictedError, UserChannelsTooMuchError, UserIdInvalidError
 
 
+#time_all = 1
+#time_error = 1
+#time_pause = 1
 
 #
 #   Function(s)
@@ -133,7 +136,7 @@ async def chooseGroup(groups):
         except:
             pass
 
-        UI.printl(2, os.environ["STR_GROUP_INVALIDNUMBER"])
+        UI.printl(2, Texts.STR_GROUP_INVALIDNUMBER)
 
     return ret
 
@@ -186,9 +189,9 @@ async def inviteAllMember(args):
     n = 0
     for user in all_participants_from:
         n += 1
-        if n % 80 == 0:
-            UI.printl(2, "Waiting %d seconds ..." % Constants.ADDTIME_RANDOM, colorama.Fore.BLUE)
-            time.sleep(Constants.ADDTIME_RANDOM)
+        if n % 50 == 0:
+            UI.printl(2, "Waiting %d seconds ..." % DTS.time_pause, colorama.Fore.BLUE)
+            time.sleep(DTS.time_pause)
             pass
         try:
             UI.printl(1, "[ %d / %d ] Adding %s %s (%d,%d) ;" % (n, len(all_participants_from), user.first_name, user.last_name, user.id, user.access_hash))
@@ -201,11 +204,14 @@ async def inviteAllMember(args):
             #time.sleep(random.randrange(0, 5))
         except PeerFloodError:
             UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
-            time.sleep(Constants.ADDTIME_WAIT)
+            #time.sleep(DTS.time_error)
+            exitProgramWithError("Stopping because of flood.")
         except FloodWaitError as e:
+            wait_sec = e.seconds
             UI.printl(2, "Getting Flood Error from telegram. Script is stopping now.", colorama.Fore.RED)
-            UI.printl(2, "Waiting %d seconds. %d seconds until unban ..." % (Constants.ADDTIME_WAIT, e.seconds), colorama.Fore.YELLOW)
-            time.sleep(Constants.ADDTIME_WAIT)
+            UI.printl(2, "Waiting, %d seconds until unban ..." % wait_sec, colorama.Fore.YELLOW)
+            #time.sleep(DTS.time_error)
+            time.sleep(wait_sec)
         except UserPrivacyRestrictedError:
             wait_sec = 5
             UI.printl(2, "The user's privacy settings do not allow you to do this. Skipping in %d Seconds ..." % wait_sec, colorama.Fore.YELLOW)
@@ -220,8 +226,8 @@ async def inviteAllMember(args):
             continue
            
         # ...
-        UI.printl(2, "Waiting %d seconds ..." % Constants.ADDTIME_EACH, colorama.Fore.BLUE)
-        time.sleep(Constants.ADDTIME_EACH)
+        UI.printl(2, "Waiting %d seconds ..." % DTS.time_all, colorama.Fore.BLUE)
+        time.sleep(DTS.time_all)
 
     
     

@@ -14,7 +14,7 @@ print("Initialyzing ...")
 import os, sys
 import DTS.verify
 import DTS, UI
-from DTS import Constants
+from DTS import Constants, Texts
 
 import configparser
 import colorama
@@ -29,17 +29,6 @@ from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedEr
 #   Var(s)
 #
 # Constant(s)
-TELEGRAM_TEST_IP = '149.154.167.40'
-TELEGRAM_TEST_PORT = 443
-TELEGRAM_PROD_IP = '149.154.167.50'
-TELEGRAM_PROD_PORT = 443
-STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
-STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
-STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
-os.environ["STR_GROUP_INVALIDNUMBER"] = "Please enter a valid number"
-os.environ["STR_GROUP_SAMENUMBER"] = "Cannot choose the same group"
-TESTS_SHOW_BOT_SETTINGS = False
-os.environ["UI_SWITCH_PAGES"] = "True"
 # Var(s)
 asked_config = {}
 
@@ -55,8 +44,7 @@ asked_config = {}
 #   Init(s)
 #
 # Var(s)
-TESTS_SHOW_BOT_SETTINGS = TESTS_SHOW_BOT_SETTINGS and Constants.TESTS_TESTING
-
+Constants.TESTS_SHOW_BOT_SETTINGS = Constants.TESTS_SHOW_BOT_SETTINGS and Constants.TESTS_TESTING
 #Constants.TESTS_ONLY_MEGAGROUPS = (Constants.TESTS_ONLY_MEGAGROUPS, False)[Constants.TESTS_TESTING]
 #Constants.UI_SWITCH_PAGES = (Constants.UI_SWITCH_PAGES, False)[Constants.TESTS_TESTING]
 # Init(s)
@@ -70,7 +58,7 @@ async def main():
 
 
     #
-    if TESTS_SHOW_BOT_SETTINGS :
+    if Constants.TESTS_SHOW_BOT_SETTINGS :
         await DTS.executeModule("Settings", DTS.showBotSettings)
 
 
@@ -108,7 +96,7 @@ async def main():
     # ...
     if group_from.id == group_to.id:
         # ...
-        DTS.exitProgramWithError(os.environ["STR_GROUP_SAMENUMBER"])
+        DTS.exitProgramWithError(Texts.STR_GROUP_SAMENUMBER)
 
 
 
@@ -168,7 +156,7 @@ async def main():
 # ...
 colorama.init()
 # ...
-sys.stdout.write("\x1b]2;%s\x07" % Constants.APP_TITLE)
+sys.stdout.write("\x1b]2;%s\x07" % Texts.APP_TITLE)
 UI.resetBanner(True)
 # ...
 print("Initialyzed.\n")
@@ -198,10 +186,10 @@ try:
     asked_config["phone"] = asked_config["phone"].replace(" ", "").replace("-", "")
     asked_config["name"] = "testName"
     # ...
-    rates_list = dict(conf_parser.items("intervals"));
-    Constants.ADDTIME_EACH = int(rates_list['time_all'])
-    Constants.ADDTIME_WAIT = int(rates_list['time_error'])
-    Constants.ADDTIME_RANDOM = int(rates_list['time_random'])
+    intervals_list = dict(conf_parser.items("intervals"));
+    DTS.time_all = int(intervals_list['time_all'])
+    DTS.time_error = int(intervals_list['time_error'])
+    DTS.time_pause = int(intervals_list['time_pause'])
 
     # ...
     print("\n")
@@ -213,7 +201,7 @@ try:
     
 except Exception :
     # ...
-    DTS.exitProgramWithError(STR_CONFIG_FILE_ERROR)
+    DTS.exitProgramWithError(Texts.STR_CONFIG_FILE_ERROR)
 
 # Connecting
 try:
@@ -224,11 +212,10 @@ try:
 except Exception as e :
     # ...
     UI.printl(5, e);
-    DTS.exitProgramWithError(STR_CONNECTION_FAILED)
+    DTS.exitProgramWithError(Texts.STR_CONNECTION_FAILED)
 
 # Execute main
 with client:
-    #if(Constants.TESTS_TESTING): client.session.set_dc(2, TELEGRAM_TEST_IP, TELEGRAM_TEST_PORT)
     client.loop.run_until_complete(main())
     pass
 
