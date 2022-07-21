@@ -118,9 +118,9 @@ async def main():
     #members = await DTS.executeModule("Scraping members from choosen groups(%d)" % len(groups), DTS.getGroupList, groups)
     
     #all_participants_from = await DTS.getMemberList(group_from)
-    all_participants_from = await DTS.executeModule("Compiling members (TO)", DTS.getMemberList, [client, group_from])
+    all_participants_from = await DTS.executeModule("Compiling members (FROM)", DTS.getMemberList, [client, group_from])
     
-    all_participants_to = await DTS.executeModule("Compiling members (FROM)", DTS.getMemberList, [client, group_to])
+    all_participants_to = await DTS.executeModule("Compiling members (TO)", DTS.getMemberList, [client, group_to])
     
     #print(str(all_participants_from[0]))
     # Reverse list to start by the end
@@ -198,15 +198,15 @@ try:
     asked_config["phone"] = asked_config["phone"].replace(" ", "").replace("-", "")
     asked_config["name"] = "testName"
     # ...
-    #rates_list = dict(conf_parser.items("intervals"));
-    #Constants.ADDTIME_EACH = int(rates_list['time_all'])
-    #Constants.ADDTIME_WAIT = int(rates_list['time_error'])
-    #Constants.ADDTIME_RANDOM = int(rates_list['time_random'])
+    rates_list = dict(conf_parser.items("intervals"));
+    Constants.ADDTIME_EACH = int(rates_list['time_all'])
+    Constants.ADDTIME_WAIT = int(rates_list['time_error'])
+    Constants.ADDTIME_RANDOM = int(rates_list['time_random'])
 
     # ...
-    print("\nConfigurations :")
+    printl(1, "\nConfigurations :")
     for k, v in asked_config.items():
-        print("%s:   %s ;" % (k, v))
+        printl(2, "%s:   %s ;" % (k, v))
     print("\n")
     
     
