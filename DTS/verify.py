@@ -6,11 +6,11 @@ import pkg_resources
 #
 #   Remove session files
 #
-dir_path = os.getcwd()
-files = os.listdir(dir_path)
-for file in files:
-    if file.endswith(".session") or file.endswith(".session-journal"):
-        os.remove(os.path.join(dir_path, file))
+#dir_path = os.getcwd()
+#files = os.listdir(dir_path)
+#for file in files:
+#    if file.endswith(".session") or file.endswith(".session-journal"):
+#        os.remove(os.path.join(dir_path, file))
 
 
         

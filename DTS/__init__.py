@@ -14,7 +14,7 @@ from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser, InputChannel, ChannelParticipantsSearch, ChannelParticipantAdmin
 from telethon.tl.functions.channels import GetParticipantsRequest, InviteToChannelRequest
-from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
+from telethon.errors.rpcerrorlist import PeerFloodError, FloodWaitError, UserPrivacyRestrictedError, UserChannelsTooMuchError, UserIdInvalidError
 
 
 
@@ -24,8 +24,9 @@ from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedEr
 
 # Execute a UI module
 async def executeModule(text, func, arg1 = None):
+
     print("")
-    #print(type(arg1))
+
     UI.printl(0, "%s  :" % text)
 
     if(arg1 == None):
@@ -33,8 +34,8 @@ async def executeModule(text, func, arg1 = None):
     else:
         ret = await func(arg1)
 
-
     print("\n")
+
     return ret
 
 
@@ -73,10 +74,11 @@ async def checkChatList(chats):
     # ...
     groups = []
     # ...
+    print("")
+    # ...
     for chat in chats:
     
         # ...
-        print("")
 
         try:
             # Var(s)
@@ -188,25 +190,31 @@ async def inviteAllMember(args):
             time.sleep(Constants.ADDTIME_RANDOM)
             pass
         try:
-            print("[ %d / %d ] Adding (%d) %s %s ;" % (n, len(all_participants_from), user.id, user.first_name, user.last_name))
+            UI.printl(1, "[ %d / %d ] Adding %s %s (%d,%d) ;" % (n, len(all_participants_from), user.first_name, user.last_name, user.id, user.access_hash))
             user_to_add = InputPeerUser(user.id, user.access_hash)
-            #print(user.id)
+            print(str(user_to_add))
             #print(user.access_hash)
             if not Constants.TESTS_TESTING:
                 await client(InviteToChannelRequest(group_to, [user_to_add]))
             #print("Waiting for 60-180 Seconds ...")
             #time.sleep(random.randrange(0, 5))
         except PeerFloodError:
-            print("Getting Flood Error from telegram. Script is stopping now. Please try again after some time.")
-            print("Waiting {} seconds".format(Constants.ADDTIME_WAIT))
+            UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
+            time.sleep(Constants.ADDTIME_WAIT)
+        except FloodWaitError:
+            UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
             time.sleep(Constants.ADDTIME_WAIT)
         except UserPrivacyRestrictedError:
-            print("The user's privacy settings do not allow you to do this. Skipping ...")
-            print("Waiting for 5 Seconds ...")
+            UI.printl(2, "The user's privacy settings do not allow you to do this. Skipping ...")
+            UI.printl(2, "Waiting for 5 Seconds ...")
             time.sleep(5)
+        except UserChannelsTooMuchError:
+            UI.printl(2, "the users you tried to add is already in too many channels/supergroups ...")
+            UI.printl(2, "Waiting for 3 Seconds ...")
+            time.sleep(3)
         except:
             traceback.print_exc()
-            print("Unexpected Error! ")
+            UI.printl(2, "Unexpected Error! ")
             continue
            
         # ...

@@ -54,7 +54,9 @@ def resetBanner(forceCls = False):
         print("\n")
         
 # Show formatted 'print'
-def printl(indentLevel, str):
+def printl(indentLevel, str, color = None):
+    if(color != None):
+        str = color + str + colorama.Fore.RESET
     str = indentText(indentLevel, str)
     return print(str)
     

@@ -58,7 +58,7 @@ asked_config = {}
 TESTS_SHOW_BOT_SETTINGS = TESTS_SHOW_BOT_SETTINGS and Constants.TESTS_TESTING
 
 #Constants.TESTS_ONLY_MEGAGROUPS = (Constants.TESTS_ONLY_MEGAGROUPS, False)[Constants.TESTS_TESTING]
-Constants.UI_SWITCH_PAGES = (Constants.UI_SWITCH_PAGES, False)[Constants.TESTS_TESTING]
+#Constants.UI_SWITCH_PAGES = (Constants.UI_SWITCH_PAGES, False)[Constants.TESTS_TESTING]
 # Init(s)
 
 
@@ -132,8 +132,8 @@ async def main():
 
     #print(type(all_participants_from))
     
-    UI.printl(1, "Compiling members  :")
-    UI.printl(2, "Total members in origin groupe: %d" % len(all_participants_from))
+    UI.printl(0, "Compiling members  :")
+    UI.printl(1, "Total members in origin groupe: %d" % len(all_participants_from))
 
     all_participants_final = []
     for participant in all_participants_from:
@@ -141,9 +141,9 @@ async def main():
             all_participants_final.append(participant)
         pass
         
-    UI.printl(2, "Number of members in already in destination groupe: %d" % (len(all_participants_from) - len(all_participants_final)))
+    UI.printl(1, "Number of members in already in destination groupe: %d" % (len(all_participants_from) - len(all_participants_final)))
 
-    UI.printl(2, "Number of members to invite: %d" % len(all_participants_final))
+    UI.printl(1, "Number of members to invite: %d" % len(all_participants_final))
 
 
     #print(len(all_participants_final ))
