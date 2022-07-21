@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 #!/bin/env python3
-# Modified by @AbirHasan2005
-#   and used by @rt-2
-# Telegram Group: http://t.me/linux_repo
-# Please give me credits if you use any codes from here.
+#
+#   by @rt-2
+#       2022-07-21
+#
 
 
 #
 #   Init(s)
 #
 print("Initialyzing ...")
+#sys.dont_write_bytecode = True
 # Import(s)
 import os, sys
+sys.dont_write_bytecode = True  # Prevent __pycache__
 import DTS.verify
 import DTS, UI
 from DTS import Constants, Texts
