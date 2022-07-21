@@ -13,7 +13,7 @@ print("Initialyzing ...")
 #sys.dont_write_bytecode = True
 # Import(s)
 import os, sys
-sys.dont_write_bytecode = True  # Prevent __pycache__
+sys.dont_write_bytecode = True  # Prevents __pycache__
 import DTS.verify
 import DTS, UI
 from DTS import Constants, Texts
