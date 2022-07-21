@@ -14,6 +14,7 @@ This has been tested on python 3.8.10 64bit on Win7.
 [creds]
 api_id = 12345678
 api_hash = 1a2B3c4D5e6F7a8B9c0D1e2F3a4B5c6D
+phone = 1 213-123-4567
 
 [intervals]
 time_all = 90
