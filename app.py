@@ -21,9 +21,6 @@ from DTS import Constants, Texts
 import configparser
 import colorama
 from telethon import TelegramClient, events
-from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser, InputChannel, ChannelParticipantsSearch
-from telethon.tl.functions.channels import GetParticipantsRequest, InviteToChannelRequest
-from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
 
 
 
