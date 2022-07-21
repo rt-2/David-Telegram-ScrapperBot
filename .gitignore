@@ -11,3 +11,5 @@ testName.session-journal
 *.pyc
 *.pyc
 *.pyc
+*.pyc
+*.pyc

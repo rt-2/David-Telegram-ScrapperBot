@@ -7,6 +7,7 @@ import os, sys
 import DTS.verify
 
 import UI
+import colorama
 from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
 from telethon.tl.types import InputPeerEmpty, ChannelParticipantAdmin
@@ -88,23 +89,25 @@ async def checkChatList(chats):
             # Print(s)
             UI.printl(1, "%s  ;" % title )
             UI.printl(2, "(%d members, %s)" % (memberNb, megaOrNotStr) )
-            #print(str(TESTS_ONLY_MEGAGROUPS) + " ;")
+            #print(str(chat) + " ;")
             # Test(s)
-            if (megaOrNot == True or TESTS_ONLY_MEGAGROUPS == False) :
+            if (megaOrNot == True or os.environ["TESTS_ONLY_MEGAGROUPS"] == "False") :
+                #print(" Yes ;")
                 # Is a mega group, or it's ignored for tests
                 groups.append(chat)
                 UI.printl(4, colorama.Fore.GREEN + "ADDED")
             else :
+                #print(" No ;")
                 # Is NOT a megagroup and therefore ignored
                 UI.printl(4, colorama.Fore.RED + "EXLUDED")
         except:
-            continue
+            pass
     
         UI.printl(4, colorama.Fore.RESET)
 
     return groups
     
-# Show bot settings
+# Get group list
 async def getGroupList(groups):
 
     # ...
@@ -139,6 +142,36 @@ async def getGroupList(groups):
         print("")
 
     return group_members
+
+    
+# Group selection
+async def chooseGroup(groups):
+
+    # ...
+    UI.printl(1, 'Choose a group :')
+    for i, g in enumerate(groups):
+        UI.printl(2, '[ %d ] - %s ;' % (i, g.title))
+    print('')
+
+    # ...
+    while(True):
+        # ...
+        asked_groupid = UI.inputl(1, "Enter a Group ID: ", colorama.Fore.RED)
+
+        try:
+            groupid = int(asked_groupid)
+
+            #print("len is %d" % len(groups))
+            if(groupid < len(groups) and groupid >= 0):
+                # ...
+                ret = groups[groupid]
+                break
+        except:
+            pass
+
+        UI.printl(2, os.environ["STR_GROUP_INVALIDNUMBER"])
+
+    return ret
 
     
     

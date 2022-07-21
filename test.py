@@ -14,6 +14,9 @@ import DTS.verify
 # Import(s)
 import os, sys
 import DTS, UI
+import configparser
+import colorama
+from telethon import TelegramClient, events
 
 
 #
@@ -28,8 +31,9 @@ TELEGRAM_PROD_PORT = 443
 STR_CONFIG_FILE_ERROR = "File 'config.data' not formatted correctly."
 STR_CONNECTION_FAILED = "Cannot connect to Telegram API."
 STR_GROUP_REQUIRES_ADMIN = "This group requires admin access (ERROR)"
-STR_GROUP_INVALIDNUMBER = "Please enter a valid number"
-TESTS_ONLY_MEGAGROUPS = True
+os.environ["STR_GROUP_INVALIDNUMBER"] = "Please enter a valid number"
+os.environ["STR_GROUP_SAMENUMBER"] = "Cannot choose the same group"
+os.environ["TESTS_ONLY_MEGAGROUPS"] = "True"
 TESTS_SHOW_BOT_SETTINGS = False
 os.environ["UI_SWITCH_PAGES"] = "True"
 # Var(s)
@@ -48,17 +52,10 @@ asked_config = {}
 #
 # Var(s)
 TESTS_SHOW_BOT_SETTINGS = TESTS_SHOW_BOT_SETTINGS and TESTS_TESTING
-#TESTS_ONLY_MEGAGROUPS = TESTS_ONLY_MEGAGROUPS and not TESTS_TESTING
-os.environ["UI_SWITCH_PAGES"] = ("True", "False")[TESTS_TESTING]
+
+#os.environ["TESTS_ONLY_MEGAGROUPS"] = (os.environ["TESTS_ONLY_MEGAGROUPS"], "False")[TESTS_TESTING]
+os.environ["UI_SWITCH_PAGES"] = (os.environ["UI_SWITCH_PAGES"], "False")[TESTS_TESTING]
 # Init(s)
-
-
-#
-#   Import(s)
-#
-import configparser
-import colorama
-from telethon import TelegramClient, events
 
 
 # Main/All?
@@ -92,33 +89,21 @@ async def main():
     UI.resetBanner()
     
     # ...
-    UI.printl(0, 'Groupe Selection')
-    UI.printl(1, 'Choose a group to scrape members :')
-    for i, g in enumerate(groups):
-        UI.printl(2, '[ %d ] - %s ;' % (i, g.title))
-    print('')
-
+    group_from = await DTS.executeModule("Groupe Selection (Scraping)", DTS.chooseGroup, groups)
+    print("Group FROM is %s" % str(group_from))
+    
     # ...
-    while(True):
+    UI.resetBanner()
+    
+    # ...
+    group_to = await DTS.executeModule("Groupe Selection (Inviting)", DTS.chooseGroup, groups)
+    print("Group TO is %s" % str(group_to))
+    
+    # Test(s)
+    # ...
+    if group_from.id == group_to.id:
         # ...
-        asked_groupid = UI.inputl(2, "Enter a Group ID: ", colorama.Fore.RED)
-
-        try:
-            groupid = int(asked_groupid)
-
-            print("len is %d" % len(groups))
-            if(groupid < len(groups) and groupid >= 0):
-                # ...
-                print("Group is %d" % groupid)
-                group1 = groups[groupid]
-                break
-        except:
-            pass
-
-        UI.printl(1, STR_GROUP_INVALIDNUMBER)
-
-
-
+        DTS.exitProgramWithError(os.environ["STR_GROUP_SAMENUMBER"])
 
 
 
