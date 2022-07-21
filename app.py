@@ -16,14 +16,19 @@ import os, sys
 import DTS, UI
 import configparser
 import colorama
+from DTS import Constants
 from telethon import TelegramClient, events
+from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser, InputChannel, ChannelParticipantsSearch
+from telethon.tl.functions.channels import GetParticipantsRequest, InviteToChannelRequest
+from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
+
 
 
 #
 #   Var(s)
 #
 # Constant(s)
-TESTS_TESTING = True
+TESTS_TESTING = False
 TELEGRAM_TEST_IP = '149.154.167.40'
 TELEGRAM_TEST_PORT = 443
 TELEGRAM_PROD_IP = '149.154.167.50'
@@ -89,16 +94,17 @@ async def main():
     UI.resetBanner()
     
     # ...
+    #group_from = groups[0]
     group_from = await DTS.executeModule("Groupe Selection (Scraping)", DTS.chooseGroup, groups)
-    print("Group FROM is %s" % str(group_from))
+    #print("Group FROM is %s" % str(group_from))
     
     # ...
-    UI.resetBanner()
+    #UI.resetBanner()
     
     # ...
+    #group_to = groups[0]
     group_to = await DTS.executeModule("Groupe Selection (Inviting)", DTS.chooseGroup, groups)
-    print("Group TO is %s" % str(group_to))
-    
+    #print("Group TO is %s" % str(group_to))
     # Test(s)
     # ...
     if group_from.id == group_to.id:
@@ -112,9 +118,25 @@ async def main():
     
     #members = await DTS.executeModule("Scraping members from choosen groups(%d)" % len(groups), DTS.getGroupList, groups)
     
+    #all_participants_from = await DTS.getMemberList(group_from)
+    all_participants_from = await DTS.executeModule("Compiling members", DTS.getMemberList, [client, group_from])
     
+    #print(str(all_participants_from[0]))
+    # Reverse list to start by the end
+    all_participants_from.reverse()
+    
+    #print(str(all_participants_from[0]))
+    # ...
+    UI.resetBanner()
 
-    
+
+
+    # ...
+    await DTS.executeModule("Inviting members", DTS.inviteAllMember, [client, all_participants_from, group_to])
+
+
+        
+
     # ...
     #print("\n\nTESTING: 'main' ending ...\n\n")
     

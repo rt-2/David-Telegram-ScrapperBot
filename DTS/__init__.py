@@ -6,11 +6,14 @@
 import os, sys
 import DTS.verify
 
+import time
 import UI
 import colorama
 from telethon import TelegramClient, events
 from telethon.tl.functions.messages import GetDialogsRequest
-from telethon.tl.types import InputPeerEmpty, ChannelParticipantAdmin
+from telethon.tl.types import InputPeerEmpty, InputPeerChannel, InputPeerUser, InputChannel, ChannelParticipantsSearch, ChannelParticipantAdmin
+from telethon.tl.functions.channels import GetParticipantsRequest, InviteToChannelRequest
+from telethon.errors.rpcerrorlist import PeerFloodError, UserPrivacyRestrictedError
 
 
 #
@@ -28,6 +31,7 @@ DIALOGREQ_CHUNKSIZE = 200
 # Execute a UI module
 async def executeModule(text, func, arg1 = None):
     print("")
+    #print(type(arg1))
     UI.printl(0, "%s  :" % text)
 
     if(arg1 == None):
@@ -107,43 +111,6 @@ async def checkChatList(chats):
 
     return groups
     
-# Get group list
-async def getGroupList(groups):
-
-    # ...
-    for group in groups:
-    
-        # ...
-        print("")
-
-        group_members = []
-        
-        UI.printl(1, group.title + " ;")
-        UI.printl(1, str(group))
-        
-        # Test(s)
-        # ...
-        if(group.admin_rights == None) :
-            UI.printl(5, colorama.Fore.RED + STR_GROUP_REQUIRES_ADMIN + colorama.Fore.RESET)
-        
-        else :
-            #UI.printl(1, str(group.admin_rights.other) + " ;")
-            
-            try:
-                var = True
-                
-                #group_members = await client.get_participants(group, aggressive=True)
-            except Exception as e :
-                var = True
-                printl(6, e)
-                #UI.printl(5, colorama.Fore.RED + STR_GROUP_REQUIRES_ADMIN + colorama.Fore.RESET)
-                
-        UI.printl(3, "Gathered %d members" % len(group_members))
-        print("")
-
-    return group_members
-
-    
 # Group selection
 async def chooseGroup(groups):
 
@@ -156,7 +123,8 @@ async def chooseGroup(groups):
     # ...
     while(True):
         # ...
-        asked_groupid = UI.inputl(1, "Enter a Group ID: ", colorama.Fore.RED)
+        #asked_groupid = UI.inputl(1, "Enter a Group ID: ", colorama.Fore.RED)
+        asked_groupid = UI.inputl(1, "Enter a Group ID: ")
 
         try:
             groupid = int(asked_groupid)
@@ -174,6 +142,82 @@ async def chooseGroup(groups):
     return ret
 
     
+# Get member list
+async def getMemberList(args):
+
+    # ...
+    client = args[0]
+    group_from = args[1]
+
+    all_participants_from = []
+    try:
+        offset = 0
+        limit = 200
+        my_filter = ChannelParticipantsSearch('')
+        #print(group_from.access_hash)
+
+        while True:
+            participants = await client(GetParticipantsRequest(InputChannel(group_from.id, group_from.access_hash), my_filter, offset, limit, Constants.PARTICIPANTREQUEST_HASH))
+            all_participants_from.extend(participants.users)
+            offset += len(participants.users)
+            if len(participants.users) < limit:
+                 break
+
+
+        #group_members = await client(GetParticipantsRequest(InputChannel(group_from.id, group_from.access_hash), my_filter, offset, limit, 0))
+        #group_members = await client.get_participants(group_from, aggressive=True)
+        
+        #print(str(all_participants_from))
+        #print(len(all_participants_from))
+        #print(str(all_participants_from[0]))
+    
+    except Exception as e:
+        print(type(e))
+        print(str(e))
+
+    return all_participants_from;
+
+
+# Get member list
+async def inviteAllMember(args):
+
+    # ...
+    client = args[0]
+    all_participants_from = args[1]
+    group_to = args[2]
+
+
+    n = 0
+    for user in all_participants_from:
+        n += 1
+        if n % 80 == 0:
+            time.sleep(Constants.ADDTIME_RANDOM)
+            pass
+        try:
+            print("[ %d / %d ] Adding (%d) %s %s ;" % (n, len(all_participants_from), user.id, user.first_name, user.last_name))
+            user_to_add = InputPeerUser(user.id, user.access_hash)
+            #print(user.id)
+            #print(user.access_hash)
+            await client(InviteToChannelRequest(group_to, [user_to_add]))
+            #print("Waiting for 60-180 Seconds ...")
+            #time.sleep(random.randrange(0, 5))
+        except PeerFloodError:
+            print("Getting Flood Error from telegram. Script is stopping now. Please try again after some time.")
+            print("Waiting {} seconds".format(Constants.ADDTIME_WAIT))
+            time.sleep(Constants.ADDTIME_WAIT)
+        except UserPrivacyRestrictedError:
+            print("The user's privacy settings do not allow you to do this. Skipping ...")
+            print("Waiting for 5 Seconds ...")
+            time.sleep(5)
+        except:
+            traceback.print_exc()
+            print("Unexpected Error! ")
+            continue
+           
+        # ...
+        time.sleep(Constants.ADDTIME_EACH)
+
+    
     
 
 # Exit Program
@@ -187,8 +231,8 @@ def exitProgram():
 def exitProgramWithError(message):
 
     UI.resetBanner()
-    print("\n\nERROR:")
-    print(message)
+    print(colorama.Fore.RED + "\n\nERROR:")
+    print(message + colorama.Fore.RESET)
     exitProgram()
 
 
