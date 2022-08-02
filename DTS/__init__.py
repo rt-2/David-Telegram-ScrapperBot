@@ -7,7 +7,7 @@ import os, sys
 import DTS.verify
 from DTS import Constants, Texts
 
-import time, traceback, re
+import time, traceback, re, random
 import UI
 import colorama
 from telethon import TelegramClient, events
@@ -194,7 +194,7 @@ async def inviteAllMember(args):
             time.sleep(DTS.time_pause)
             pass
         try:
-            UI.printl(1, "[ %d / %d ] Adding %s %s (%d,%d) ;" % (n, len(all_participants_from), user.first_name, user.last_name, user.id, user.access_hash))
+            UI.printl(1, "[ %d / %d ] Adding %s %s (%d, %d) ;" % (n, len(all_participants_from), user.first_name, user.last_name, user.id, user.access_hash))
             user_to_add = InputPeerUser(user.id, user.access_hash)
             #print(str(user))
             #print(user.access_hash)
@@ -226,8 +226,9 @@ async def inviteAllMember(args):
             continue
            
         # ...
-        UI.printl(2, "Waiting %d seconds ..." % DTS.time_all, colorama.Fore.BLUE)
-        time.sleep(DTS.time_all)
+        wait_sec = random.randrange(DTS.time_all_1, DTS.time_all_2);
+        UI.printl(2, "Waiting %d seconds ..." % wait_sec, colorama.Fore.BLUE)
+        time.sleep(wait_sec)
 
     
     

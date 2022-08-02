@@ -128,7 +128,7 @@ async def main():
             all_participants_final.append(participant)
         pass
         
-    UI.printl(1, "Number of members in already in destination groupe: %d" % (len(all_participants_from) - len(all_participants_final)))
+    UI.printl(1, "Number of members already in destination groupe: %d" % (len(all_participants_from) - len(all_participants_final)))
 
     UI.printl(1, "Number of members to invite: %d" % len(all_participants_final))
 
@@ -186,7 +186,8 @@ try:
     asked_config["name"] = "testName"
     # ...
     intervals_list = dict(conf_parser.items("intervals"));
-    DTS.time_all = int(intervals_list['time_all'])
+    DTS.time_all_1 = int(intervals_list['time_all_1'])
+    DTS.time_all_2 = int(intervals_list['time_all_2'])
     DTS.time_error = int(intervals_list['time_error'])
     DTS.time_pause = int(intervals_list['time_pause'])
 
