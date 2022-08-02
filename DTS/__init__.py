@@ -203,7 +203,7 @@ async def inviteAllMember(args):
             #print("Waiting for 60-180 Seconds ...")
             #time.sleep(random.randrange(0, 5))
         except PeerFloodError:
-            UI.printl(2, "Getting Flood Error from telegram. Script is stopping now. Waiting %d seconds" % Constants.ADDTIME_WAIT, colorama.Fore.RED)
+            UI.printl(2, "Getting Flood Error from telegram. Script is stopping now.", colorama.Fore.RED)
             #time.sleep(DTS.time_error)
             exitProgramWithError("Stopping because of flood.")
         except FloodWaitError as e:
